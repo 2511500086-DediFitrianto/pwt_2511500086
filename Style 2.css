@@ -29,7 +29,7 @@ body {
     position: absolute;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, #7b6cff 0%, transparent 70%);
+    background: radial-gradient(circle, #0015ff 0%, transparent 70%);
     top: -200px;
     right: -200px;
     opacity: 0.18;
@@ -68,7 +68,7 @@ body {
 }
 
 .hero-text h1 span {
-    color: #7b6cff;
+    color: #0015ff;
 }
 
 /* PARAGRAF */
@@ -87,7 +87,7 @@ body {
     font-size: 18px;
     border: none;
     border-radius: 10px;
-    background: #7b6cff;
+    background: #0015ff;
     color: #fff;
     cursor: pointer;
     transition: 0.3s ease;
@@ -97,7 +97,7 @@ body {
 }
 
 .hero-text button:hover {
-    background: #4b3fd6;
+    background: #0015ff;
     transform: translateY(-4px);
 }
 

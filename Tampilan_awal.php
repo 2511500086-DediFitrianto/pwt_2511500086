@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIMPKK</title>
+    <title>Web Dedi</title>
     <link rel="stylesheet" href="style 2.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
     </div>
 
     <div class="hero-image">
-        <img src="img.png" alt="Ilustrasi">
+        <img src="char.png" alt="Ilustrasi">
     </div>
 </section>
 

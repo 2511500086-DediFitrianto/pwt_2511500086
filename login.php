@@ -38,7 +38,7 @@ if(isset($_POST['login'])){
     </head>
     <body>
         <header>
-            <h2 class="logo"><img src="logo.png" alt="Logo"></h2>
+            <h2 class="logo"><img src=".png" alt="Logo"></h2>
             <nav class="navigation">
                 <a href="#">Home</a>
                 <a href="#">About</a>
@@ -74,7 +74,7 @@ if(isset($_POST['login'])){
                 </form>
             </div>
             <div class="right">
-                <img src="img.png" alt="">
+                <img src="char.png" alt="">
             </div>
         </div>
     </body></html>

@@ -10,7 +10,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #947fff;
+    background: #0000ff;
 }
 
 header {
@@ -29,7 +29,7 @@ header {
 
 .logo {
     font-size: 2em;
-    color: #947fff;
+    color: #0000ff;
     user-select: none;
 }
 
@@ -41,7 +41,7 @@ header {
 .navigation a {
     position: relative;
     font-size: 1.3em;
-    color: #947fff;
+    color: #0000ff;
     text-decoration: none;
     font-weight: 500;
     margin-left: 40px;
@@ -55,7 +55,7 @@ header {
     bottom: -6px;
     width: 100%;
     height: 3px;
-    background: #947fff;
+    background: #0000ff;
     border-radius: 5px;
     transform: scaleX(0);
     transform-origin: right;
@@ -68,9 +68,9 @@ header {
 }
 
 .container {
-    width: 100%;
+    width: 90%;
     display: flex;
-    max-width: 850px;
+    max-width: 750px;
     background: #fff;
     border-radius: 15px;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -90,18 +90,18 @@ h1 {
     text-align: center;
     font-weight: bolder;
     text-transform: uppercase;
-    color: #947fff;
+    color: #0000ff;
 }
 
 hr {
-    border-top: 2px solid #947fff;
+    border-top: 2px solid #0000ff;
 }
 
 p {
     text-align: center;
     margin: 10px;
     font-size: 18px;
-    color: #947fff;
+    color: #0000ff;
 }
 
 .social-icons{
@@ -125,10 +125,11 @@ p {
 }
 
 .right img {
-    width: 450px;
-    height: 100%;
+    width: 325px;
+    height: 475px;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
+    margin-top: 30px;
 }
 
 form label {
@@ -136,7 +137,7 @@ form label {
     font-size: 16px;
     font-weight: 600;
     padding: 5px;
-    color: #947fff;
+    color: #0000ff;
 }
 
 input {
@@ -154,7 +155,7 @@ button {
     outline: none;
     padding: 8px;
     border-radius: 5px;
-    background: #947fff;
+    background: #0000ff;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -163,19 +164,19 @@ button {
 }
 
 button:hover {
-    background: rgb(82, 0, 154);
+    background: rgb(0, 17, 255);
 }
 
 .icon.google:hover {
-    background: rgb(148, 90, 247);
+    background: rgb(0, 17, 255);
 }
 
 .icon.facebook:hover {
-    background: rgb(148, 90, 247);
+    background: rgb(0, 17, 255);
 }
 
 .icon.twitter:hover {
-    background: rgb(148, 90, 247);
+    background: rgb(0, 17, 255);
 }
 
 @media (max-width: 880px) {
