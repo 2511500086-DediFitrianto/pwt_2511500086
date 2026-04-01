@@ -206,3 +206,88 @@ button:hover {
         height: 100%;
     }
 }
+
+/* ================= ANIMASI ================= */
+
+@keyframes fadeSlide {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeSlide 1s ease;
+}
+
+body {
+    background: linear-gradient(-45deg, #0000ff, #0011ff, #0033ff, #0000cc);
+    background-size: 400% 400%;
+    animation: gradientMove 10s ease infinite;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    transition: 0.4s;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+input {
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #0000ff;
+    box-shadow: 0 0 8px #0000ff;
+    transform: scale(1.03);
+}
+
+button {
+    transition: 0.3s;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:hover {
+    box-shadow: 0 0 15px #0000ff;
+}
+
+.icon.google, 
+.icon.facebook, 
+.icon.twitter {
+    transition: 0.3s;
+}
+
+.icon.google:hover, 
+.icon.facebook:hover, 
+.icon.twitter:hover {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.right img {
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+h1, p, form label {
+    animation: fadeSlide 1.2s ease;
+}
