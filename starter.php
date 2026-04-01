@@ -85,7 +85,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Dedi Fitrianto</a>
         </div>
       </div>
 
@@ -127,12 +127,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Inactive Page</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="logout.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Logout</p>
-                </a>
-              </li>
             </ul>
           </li>
           <li class="nav-item">
@@ -142,6 +136,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 Simple Link
                 <span class="right badge badge-danger">New</span>
               </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="logout.php" class="nav-link text-danger" onclick="return confirm('Yakin mau logout?')">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>
+                  Logout
+                </p>
             </a>
           </li>
         </ul>
