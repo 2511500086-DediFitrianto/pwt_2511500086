@@ -12,7 +12,7 @@
     <div class="hero-text">
         <h1>Perkenalkan, Saya <span>Dedi Fitrianto</span></h1>
         <p>Mau lebih mengenal saya? Klik tombol di bawah.</p>
-        <button onclick="location.href='login.php'">Login</button>
+        <button onclick="location.href='login.php'">Register</button>
     </div>
 
     <div class="hero-image">

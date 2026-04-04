@@ -37,15 +37,6 @@ if(isset($_POST['login'])){
 </style>
     </head>
     <body>
-        <header>
-            <h2 class="logo"><img src=".png" alt="Logo"></h2>
-            <nav class="navigation">
-                <a href="#">Home</a>
-                <a href="#">About</a>
-                <a href="#">Services</a>
-                <a href="#">Contact</a>
-            </nav>
-        </header>
         <div class="container">
             <div class="login">
                 <form method="POST">
