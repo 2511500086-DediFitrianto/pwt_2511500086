@@ -47,40 +47,40 @@ if(isset($_POST['tambah'])){
                     <form method="POST" action="">
                         <div class="form-group">
                             <label for="Kd_guru">Kode Guru</label>
-                            <input type="text" name="Kd_guru" value="<?= $hasilkode; ?>" class="form-control" readonly>
+                            <input type="text" name="Kd_guru" value="<?= $edit['Kd_guru']; ?>" class="form-control" readonly>
                         </div>
                         <div class="form-group">
                             <label for="Id_user">ID User</label>
-                            <input type="text" name="Id_user" id="Id_user" class="form-control">
+                            <input type="text" name="Id_user" id="Id_user" value="<?= $edit['Id_user']; ?>" class="form-control">
                         </div>
 
                         <div class="form-group">
                             <label for="Nm_guru">Nama Guru</label>
-                            <input type="text" name="Nm_guru" id="Nm_guru" class="form-control">
+                            <input type="text" name="Nm_guru" id="Nm_guru" value="<?= $edit['Nm_guru']; ?>" class="form-control">
                         </div>
                         
                         <div class="form-group">
                             <label for="Jenkel">Jenis Kelamin</label>
                             <select name="Jenkel" id="Jenkel" class="form-control">
                                 <option value="">-- Pilih --</option>
-                                <option value="L">Laki-laki</option>
-                                <option value="P">Perempuan</option>
+                                <option value="L" <?= ($edit['Jenkel'] == 'L') ? 'selected' : '' ?>>Laki-laki</option>
+                                <option value="P" <?= ($edit['Jenkel'] == 'P') ? 'selected' : '' ?>>Perempuan</option>
                             </select>
                         </div>
                         
                         <div class="form-group">
                             <label for="Pend_terakhir">Pendidikan Terakhir</label>
-                            <input type="text" name="Pend_terakhir" id="Pend_terakhir" class="form-control">
+                            <input type="text" name="Pend_terakhir" id="Pend_terakhir" value="<?= $edit['Pend_terakhir']; ?>" class="form-control">
                         </div>
                         
                         <div class="form-group">
                             <label for="Hp">No HP</label>
-                            <input type="text" name="Hp" id="Hp" class="form-control">
+                            <input type="text" name="Hp" id="Hp" value="<?= $edit['Hp']; ?>" class="form-control">
                         </div>
                         
                         <div class="form-group">
                             <label for="Alamat">Alamat</label>
-                            <textarea name="Alamat" id="Alamat" class="form-control"></textarea>
+                            <textarea name="Alamat" id="Alamat" class="form-control"><?= $edit['Alamat']; ?></textarea>
                         </div>
                         <div class="card-footer">
                             <input type="submit" class="btn btn-primary" name="tambah" value="Simpan">
