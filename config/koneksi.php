@@ -1,11 +1,10 @@
 <?php
 $host = "localhost";
-$port = "8889";
 $user = "root";
-$pass = "root";
+$pass = "";
 $db   = "db_mahasiswa";
 
-$conn = mysqli_connect($host, $user, $pass, $db, $port);
+$conn = mysqli_connect($host, $user, $pass, $db);
 
 if (!$conn) {
     die("Koneksi gagal: " . mysqli_connect_error());
