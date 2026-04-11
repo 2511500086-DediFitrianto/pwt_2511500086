@@ -13,11 +13,11 @@ include "config/koneksi.php";
 
 if (isset($_GET['action']) && $_GET['action'] == "hapus") {
     $kd = $_GET['kd'];
-    $query = mysqli_query($conn, "DELETE FROM guru WHERE Kd_guru='$kd'");
+    $query = mysqli_query($conn, "DELETE FROM Siswa WHERE Nis='$kd'");
 
     if ($query) {
         echo "<div class='alert alert-warning'>Berhasil Di Hapus</div>";
-        echo '<meta http-equiv="refresh" content="1;url=starter.php?page=guru">';
+        echo '<meta http-equiv="refresh" content="1;url=starter.php?page=siswa">';
     }
 }
 ?>
@@ -27,21 +27,20 @@ if (isset($_GET['action']) && $_GET['action'] == "hapus") {
         <div class="card">
             <div class="card-body">
 
-                <a href="starter.php?page=tambah_guru" class="btn btn-primary btn-sm mb-3">
-                    Tambah Guru
+                <a href="starter.php?page=tambah_siswa" class="btn btn-primary btn-sm mb-3">
+                    Tambah Siswa
                 </a>
 
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>NO</th>
-                            <th>Kd Guru</th>
+                            <th>Nis</th>
                             <th>Id User</th>
-                            <th>Nama Guru</th>
+                            <th>Nama Siswa</th>
                             <th>Jenis Kelamin</th>
-                            <th>Pendidikan Terakhir</th>
                             <th>No HP</th>
-                            <th>Alamat</th>
+                            <th>Id Kelas</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -49,25 +48,24 @@ if (isset($_GET['action']) && $_GET['action'] == "hapus") {
                     <tbody>
                         <?php
                         $no = 0;
-                        $query = mysqli_query($conn, "SELECT * FROM guru");
+                        $query = mysqli_query($conn, "SELECT * FROM Siswa");
                         while ($result = mysqli_fetch_array($query)) {
                             $no++;
                             ?>
                         <tr>
                             <td><?= $no; ?></td>
-                            <td><?= $result['Kd_guru']; ?></td>
+                            <td><?= $result['Nis']; ?></td>
                             <td><?= $result['Id_user']; ?></td>
-                            <td><?= $result['Nm_guru']; ?></td>
+                            <td><?= $result['Nm_siswa']; ?></td>
                             <td><?= $result['Jenkel']; ?></td>
-                            <td><?= $result['Pend_terakhir']; ?></td>
                             <td><?= $result['Hp']; ?></td>
-                            <td><?= $result['Alamat']; ?></td>
+                            <td><?= $result['Id_kelas']; ?></td>
                             <td>
-                                <a href="starter.php?page=guru&action=hapus&kd=<?= $result['Kd_guru'] ?>">
+                                <a href="starter.php?page=siswa&action=hapus&kd=<?= $result['Nis'] ?>">
                                     <span class="badge badge-danger">Hapus</span>
                                 </a>
 
-                                <a href="starter.php?page=edit_guru&kd=<?= $result['Kd_guru'] ?>">
+                                <a href="starter.php?page=edit_siswa&kd=<?= $result['Nis'] ?>">
                                     <span class="badge badge-warning">Edit</span>
                                 </a>
                             </td>
