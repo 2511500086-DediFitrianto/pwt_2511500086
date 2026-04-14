@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Data Mata Pelajaran</h1>
+                <h1 class="m-0 text-dark">Tambah Data Siswa</h1>
             </div>
         </div>
     </div>
@@ -59,7 +59,7 @@ if(isset($_POST['tambah'])){
                         </div>
                         <div class="form-group">
                             <label for="Id_user">ID User</label>
-                            <input type="text" name="Id_user" id="Id_user" class="form-control">
+                            <input type="number" name="Id_user" id="Id_user" class="form-control">
                         </div>
 
                         <div class="form-group">
@@ -83,7 +83,7 @@ if(isset($_POST['tambah'])){
                         
                         <div class="form-group">
                             <label for="Id_kelas">ID Kelas</label>
-                            <input type="text" name="Id_kelas" id="Id_kelas" class="form-control">
+                            <input type="number" name="Id_kelas" id="Id_kelas" class="form-control">
                         </div>
                         <div class="card-footer">
                             <input type="submit" class="btn btn-primary" name="tambah" value="Simpan">
