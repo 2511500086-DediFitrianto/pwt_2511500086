@@ -154,7 +154,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
               
               <li class="nav-item">
-                <a href="starter.php?page=jadwal" 
+                <a href="starter.php?page=jadwal_kelas" 
                    class="nav-link <?= ($_GET['page'] == 'jadwal') ? 'active' : ''; ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Jadwal kelas</p>
