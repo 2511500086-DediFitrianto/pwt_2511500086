@@ -14,11 +14,12 @@ $kd = $_GET['kd'];
 $edit = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM jadwal_kelas WHERE Id_jadwal='$kd'"));
 
 if(isset($_POST['tambah'])){
+    $Id_jadwal = $_POST['Id_jadwal'];
     $Id_kelas = $_POST['Id_kelas'];
     $Thn_ajaran = $_POST['Thn_ajaran'];
     $Semester = $_POST['Semester'];
 
-    $insert = mysqli_query($conn, "UPDATE jadwal_kelas SET Id_kelas='$Id_kelas', Thn_ajaran='$Thn_ajaran', Semester='$Semester' WHERE Id_jadwal='$kd_mapel'");
+    $insert = mysqli_query($conn, "UPDATE jadwal_kelas SET Id_kelas='$Id_kelas', Thn_ajaran='$Thn_ajaran', Semester='$Semester' WHERE Id_jadwal='$kd'");
 
     if ($insert) {
         echo '<div class="alert alert-info-dismissible">

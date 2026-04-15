@@ -30,6 +30,7 @@ if(isset($_POST['tambah'])){
     $Id_kelas = $_POST['Id_kelas'];
 
     $insert = mysqli_query($conn, "INSERT INTO Siswa values ('$Nis','$Id_user','$Nm_siswa','$Jenkel','$Hp','$Id_kelas')");
+    $insertuser = mysqli_query($conn, "INSERT INTO admin (username, password, role) values ('$Nis','12345','siswa')");
 
     if ($insert) {
         echo '<div class="alert alert-info-dismissible">
@@ -43,7 +44,7 @@ if(isset($_POST['tambah'])){
         <button type="button" class="close" data-dismiss="alert"
             aria-hidden="true">×</button>
         <h5><i class="icon fas fa-info"></i> Info </h5>
-        <h4>Gagal Disimpan</h4></div>';
+        <h4>Nis sudah dipakai, Gagal Disimpan</h4></div>';
     }
 }
 ?>
@@ -83,7 +84,15 @@ if(isset($_POST['tambah'])){
                         
                         <div class="form-group">
                             <label for="Id_kelas">ID Kelas</label>
-                            <input type="number" name="Id_kelas" id="Id_kelas" class="form-control">
+                            <select type="text" name="Id_kelas" id="Id_kelas" class="form-control">
+                                <option value="">-- Pilih --</option>
+                                <?php
+                                $query = mysqli_query($conn, "SELECT * FROM kelas");
+                                while ($result = mysqli_fetch_array($query)) {
+                                    echo "<option value='" . $result['Id_kelas'] . "'>" . $result['Nm_kelas'] . "</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="card-footer">
                             <input type="submit" class="btn btn-primary" name="tambah" value="Simpan">
