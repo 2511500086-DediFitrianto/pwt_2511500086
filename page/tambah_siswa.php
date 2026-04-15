@@ -30,9 +30,9 @@ if(isset($_POST['tambah'])){
     $Id_kelas = $_POST['Id_kelas'];
 
     $insert = mysqli_query($conn, "INSERT INTO Siswa values ('$Nis','$Id_user','$Nm_siswa','$Jenkel','$Hp','$Id_kelas')");
-    $insertuser = mysqli_query($conn, "INSERT INTO admin (username, password, role) values ('$Nis','12345','siswa')");
+    $insertuser = mysqli_query($conn, "INSERT INTO admin (username, password) values ('$Nis','12345')");
 
-    if ($insert) {
+    if ($insert && $insertuser) {
         echo '<div class="alert alert-info-dismissible">
         <button type="button" class="close" data-dismiss="alert"
             aria-hidden="true">×</button>

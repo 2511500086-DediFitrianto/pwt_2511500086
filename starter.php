@@ -77,15 +77,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <span class="brand-text font-weight-light">AdminLTE 3</span>
     </a>
 
+    <?php
+    session_start();
+    include "config/koneksi.php";
+    
+    $username = $_SESSION['username'];
+    
+    $query = mysqli_query($conn, "SELECT Nm_siswa FROM siswa WHERE Nis='$username'");
+    $data = mysqli_fetch_array($query);
+    ?>
     <!-- Sidebar -->
     <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="char.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="char.jpg" class="img-circle elevation-2">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Dedi Fitrianto</a>
+          <a href="#" class="d-block">
+            <?= $data['Nm_siswa']; ?>
+          </a>
         </div>
       </div>
 

@@ -48,7 +48,7 @@ if(isset($_POST['tambah'])){
                     <form method="POST" action="">
                         <div class="form-group">
                             <label for="Id_kelas">Kode Kelas</label>
-                            <input type="text" name="Id_kelas" value="<?= $kode; ?>" placeholder="Id Kelas" class="form-control" readonly>
+                            <input type="text" name="Id_kelas" placeholder="Id Kelas" class="form-control" >
                         </div>
 
                         <div class="form-group">
