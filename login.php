@@ -14,14 +14,19 @@ if(isset($_POST['login'])){
 
         $_SESSION['username'] = $data['username'];
         $_SESSION['role'] = $data['role']; 
+        if ($data['password'] == '12345') {
 
-        header("location:starter.php?page=dashboard");
+        header("location:starter.php?page=ganti_password");
+        } else {
+                header("Location:starter.php");
+            }
         exit;
 
     }else{
         echo "<script>alert('Username atau Password salah');</script>";
     }
 }
+
 ?>
 
 <!DOCTYPE html>

@@ -8,6 +8,24 @@ $jml_kelas = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM kelas"));
 $jml_jadwal = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM jadwal_kelas"));
 ?>
 
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="card text-white" style="background: linear-gradient(45deg, #4facfe, #00f2fe);">
+      <div class="card-body justify-content-between align-items-center">
+        
+        <div>
+          <h4 class="mb-1">
+            Welcome, <b><?= $_SESSION['username']; ?></b> 👋
+          </h4>
+          <small class="text-muted">
+            Selamat datang di Sistem Informasi Sekolah
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <div class="col-lg-3 col-6">
     <div class="small-box bg-info">
