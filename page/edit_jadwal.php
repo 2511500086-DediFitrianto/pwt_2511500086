@@ -30,16 +30,18 @@ if(isset($_POST['tambah'])){
     $insert = mysqli_query($conn, "UPDATE jadwal_kelas SET Id_kelas='$Id_kelas', Thn_ajaran='$Thn_ajaran', Semester='$Semester' WHERE Id_jadwal='$kd'");
 
     if ($insert) {
-        echo '<div class="alert alert-info-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h5><i class="icon fas fa-info"></i> Info </h5>
+        echo '<div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h5><i class="icon fas fa-check"></i> Info</h5>
         <h4>Berhasil Disimpan</h4></div>';
-        echo '<meta http-equiv="refresh" content="1;url=starter.php?page=Jadwal_kelas">';
+        echo '<meta http-equiv="refresh" content="1;url=starter.php?page=jadwal_kelas">';
     } else {
-        echo '<div class="alert alert-warning alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h5><i class="icon fas fa-info"></i> Info </h5>
-        <h4>Gagal Disimpan</h4></div>';
+        echo '<div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h5><i class="icon fas fa-exclamation-triangle"></i> Error</h5>
+        <h4>Gagal Disimpan</h4>';
+        echo mysqli_error($conn);
+        echo '</div>';
     }
 }
 ?>

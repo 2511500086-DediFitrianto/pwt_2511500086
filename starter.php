@@ -141,7 +141,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               
-              <?php if($role == 'admin'){ ?>
               <li class="nav-item">
                 <a href="starter.php?page=guru" 
                    class="nav-link <?= ($_GET['page'] == 'guru') ? 'active' : ''; ?>">
@@ -149,7 +148,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Data Guru</p>
                 </a>
               </li>
-              <?php } ?>
               
               <li class="nav-item">
                 <a href="starter.php?page=kelas" 
@@ -159,7 +157,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               
-              <?php if($role == 'admin'){ ?>
               <li class="nav-item">
                 <a href="starter.php?page=siswa" 
                    class="nav-link <?= ($_GET['page'] == 'siswa') ? 'active' : ''; ?>">
@@ -167,7 +164,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Siswa</p>
                 </a>
               </li>           
-              <?php } ?>
             
               <li class="nav-item">
                 <a href="starter.php?page=jadwal_kelas" 

@@ -11,8 +11,6 @@
 <?php
 include "config/koneksi.php";
 
-echo "Role: " . $_SESSION['role'];
-
 if (isset($_GET['action']) && $_GET['action'] == "hapus") {
     $kd = $_GET['kd'];
     $query = mysqli_query($conn, "DELETE FROM mapel WHERE kd_mapel='$kd'");
