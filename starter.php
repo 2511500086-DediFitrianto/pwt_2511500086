@@ -2,7 +2,7 @@
 session_start();
 
 if(!isset($_SESSION['username'])){
-    header("location:login.php");
+    header("location:starter.php");
 }
 ?>
 
@@ -83,8 +83,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     
     $username = $_SESSION['username'];
     
-    $query = mysqli_query($conn, "SELECT Nm_siswa FROM siswa WHERE Nis='$username'");
+    $query = mysqli_query($conn, "SELECT username, role FROM admin WHERE username='$username'");
     $data = mysqli_fetch_array($query);
+    $role = $data['role'];
     ?>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -94,7 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <div class="info">
           <a href="#" class="d-block">
-            <?= $data['Nm_siswa']; ?>
+            <?= $data['username']; ?>
           </a>
         </div>
       </div>
@@ -115,7 +116,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="starter.php" class="nav-link">
+            <a href="starter.php?page=dashboard" class="nav-link">
               <i class="fas fa-home"></i>
               <p>
                 Home
@@ -131,6 +132,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
             </a>
             <ul class="nav nav-treeview">
+              
               <li class="nav-item">
                 <a href="starter.php?page=mapel" 
                     class="nav-link <?= ($_GET['page'] == 'mapel') ? 'active' : ''; ?>">
@@ -139,6 +141,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               
+              <?php if($role == 'admin'){ ?>
               <li class="nav-item">
                 <a href="starter.php?page=guru" 
                    class="nav-link <?= ($_GET['page'] == 'guru') ? 'active' : ''; ?>">
@@ -146,6 +149,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Data Guru</p>
                 </a>
               </li>
+              <?php } ?>
               
               <li class="nav-item">
                 <a href="starter.php?page=kelas" 
@@ -155,14 +159,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               
+              <?php if($role == 'admin'){ ?>
               <li class="nav-item">
                 <a href="starter.php?page=siswa" 
                    class="nav-link <?= ($_GET['page'] == 'siswa') ? 'active' : ''; ?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Siswa</p>
                 </a>
-              </li>
-              
+              </li>           
+              <?php } ?>
+            
               <li class="nav-item">
                 <a href="starter.php?page=jadwal_kelas" 
                    class="nav-link <?= ($_GET['page'] == 'jadwal_kelas') ? 'active' : ''; ?>">
@@ -170,6 +176,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Jadwal kelas</p>
                 </a>
               </li>
+            
+              <li class="nav-item">
+                <a href="starter.php?page=ganti_password" 
+                   class="nav-link <?= ($_GET['page'] == 'ganti_password') ? 'active' : ''; ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ganti Password</p>
+                </a>
+              </li>
+            
             </ul>
           </li>
           <li class="nav-item">

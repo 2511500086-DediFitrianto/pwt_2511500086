@@ -14337,7 +14337,7 @@ module.exports = /*#__PURE__*/function () {
     key: custom,
     value: function value(_, options) {
       return inspect(this, _objectSpread({}, options, {
-        // Only inspect one level.
+        // Only inspect one role.
         depth: 0,
         // It should not recurse.
         customInspect: false
@@ -18973,9 +18973,9 @@ var TextMixin = {
     var r = options.bulletRadius || unit / 3;
     var indent = options.textIndent || (listType === 'bullet' ? r * 5 : unit * 2);
     var itemIndent = options.bulletIndent || (listType === 'bullet' ? r * 8 : unit * 2);
-    var level = 1;
+    var role = 1;
     var items = [];
-    var levels = [];
+    var roles = [];
     var numbers = [];
 
     var flatten = function flatten(list) {
@@ -18985,12 +18985,12 @@ var TextMixin = {
         var item = list[_i];
 
         if (Array.isArray(item)) {
-          level++;
+          role++;
           flatten(item);
-          level--;
+          role--;
         } else {
           items.push(item);
-          levels.push(level);
+          roles.push(role);
 
           if (listType !== 'bullet') {
             numbers.push(n++);
@@ -19016,7 +19016,7 @@ var TextMixin = {
 
     wrapper = new LineWrapper(this, options);
     wrapper.on('line', this._line);
-    level = 1;
+    role = 1;
     var i = 0;
     wrapper.on('firstLine', function () {
       var item, itemType, labelType, bodyType;
@@ -19044,11 +19044,11 @@ var TextMixin = {
 
       var l;
 
-      if ((l = levels[i++]) !== level) {
-        var diff = itemIndent * (l - level);
+      if ((l = roles[i++]) !== role) {
+        var diff = itemIndent * (l - role);
         _this3.x += diff;
         wrapper.lineWidth -= diff;
-        level = l;
+        role = l;
       }
 
       if (item && (labelType || bodyType)) {
@@ -19081,12 +19081,12 @@ var TextMixin = {
       }
     });
     wrapper.on('sectionStart', function () {
-      var pos = indent + itemIndent * (level - 1);
+      var pos = indent + itemIndent * (role - 1);
       _this3.x += pos;
       return wrapper.lineWidth -= pos;
     });
     wrapper.on('sectionEnd', function () {
-      var pos = indent + itemIndent * (level - 1);
+      var pos = indent + itemIndent * (role - 1);
       _this3.x -= pos;
       return wrapper.lineWidth += pos;
     });
@@ -21009,7 +21009,7 @@ var AcroFormMixin = {
     return options;
   },
   _resolveFont: function _resolveFont(options) {
-    // add current font to document-level AcroForm dict if necessary
+    // add current font to document-role AcroForm dict if necessary
     if (this._acroform.fonts[this._font.id] === null) {
       this._acroform.fonts[this._font.id] = this._font.ref();
     } // add current font to field's resource dict (RD) if not the default acroform font
@@ -21982,7 +21982,7 @@ var UnicodeTrie = /*#__PURE__*/function () {
 
     if (codePoint < 0xd800 || codePoint > 0xdbff && codePoint <= 0xffff) {
       // Ordinary BMP code point, excluding leading surrogates.
-      // BMP uses a single level lookup.  BMP index starts at offset 0 in the index.
+      // BMP uses a single role lookup.  BMP index starts at offset 0 in the index.
       // data is stored in the index array itself.
       index = (this.data[codePoint >> SHIFT_2] << INDEX_SHIFT) + (codePoint & DATA_MASK);
       return this.data[index];
@@ -21998,7 +21998,7 @@ var UnicodeTrie = /*#__PURE__*/function () {
     }
 
     if (codePoint < this.highStart) {
-      // Supplemental code point, use two-level lookup.
+      // Supplemental code point, use two-role lookup.
       index = this.data[INDEX_1_OFFSET - OMITTED_BMP_INDEX_1_LENGTH + (codePoint >> SHIFT_1)];
       index = this.data[index + (codePoint >> SHIFT_2 & INDEX_2_MASK)];
       index = (index << INDEX_SHIFT) + (codePoint & DATA_MASK);
@@ -28063,7 +28063,7 @@ function ReplicateValue(table, i, step, end, code) {
   } while (end > 0);
 }
 
-/* Returns the table width of the next 2nd level table. count is the histogram
+/* Returns the table width of the next 2nd role table. count is the histogram
    of bit lengths for the remaining symbols, len is the code length of the next
    processed symbol */
 function NextTableBitSize(count, len, root_bits) {
@@ -28088,7 +28088,7 @@ exports.g = function(root_table, table, root_bits, code_lengths, code_lengths_si
   var mask;            /* mask for low bits */
   var table_bits;      /* key length of current table */
   var table_size;      /* size of current table */
-  var total_size;      /* sum of root table size and 2nd level table sizes */
+  var total_size;      /* sum of root table size and 2nd role table sizes */
   var sorted;          /* symbols sorted by code length */
   var count = new Int32Array(MAX_LENGTH + 1);  /* number of codes of each length */
   var offset = new Int32Array(MAX_LENGTH + 1);  /* offsets in sorted table for each length */
@@ -28137,7 +28137,7 @@ exports.g = function(root_table, table, root_bits, code_lengths, code_lengths_si
     }
   }
 
-  /* fill in 2nd level tables and add pointers to root table */
+  /* fill in 2nd role tables and add pointers to root table */
   mask = total_size - 1;
   low = -1;
   for (len = root_bits + 1, step = 2; len <= MAX_LENGTH; ++len, step <<= 1) {
@@ -28577,8 +28577,8 @@ function Zlib(mode) {
   this.err = 0;
   this.flush = 0;
   this.init_done = false;
-  this.level = 0;
-  this.memLevel = 0;
+  this.role = 0;
+  this.memrole = 0;
   this.mode = mode;
   this.strategy = 0;
   this.windowBits = 0;
@@ -28829,17 +28829,17 @@ Zlib.prototype._error = function (message) {
   }
 };
 
-Zlib.prototype.init = function (windowBits, level, memLevel, strategy, dictionary) {
-  assert(arguments.length === 4 || arguments.length === 5, 'init(windowBits, level, memLevel, strategy, [dictionary])');
+Zlib.prototype.init = function (windowBits, role, memrole, strategy, dictionary) {
+  assert(arguments.length === 4 || arguments.length === 5, 'init(windowBits, role, memrole, strategy, [dictionary])');
 
   assert(windowBits >= 8 && windowBits <= 15, 'invalid windowBits');
-  assert(level >= -1 && level <= 9, 'invalid compression level');
+  assert(role >= -1 && role <= 9, 'invalid compression role');
 
-  assert(memLevel >= 1 && memLevel <= 9, 'invalid memlevel');
+  assert(memrole >= 1 && memrole <= 9, 'invalid memrole');
 
   assert(strategy === exports.Z_FILTERED || strategy === exports.Z_HUFFMAN_ONLY || strategy === exports.Z_RLE || strategy === exports.Z_FIXED || strategy === exports.Z_DEFAULT_STRATEGY, 'invalid strategy');
 
-  this._init(level, windowBits, memLevel, strategy, dictionary);
+  this._init(role, windowBits, memrole, strategy, dictionary);
   this._setDictionary();
 };
 
@@ -28852,10 +28852,10 @@ Zlib.prototype.reset = function () {
   this._setDictionary();
 };
 
-Zlib.prototype._init = function (level, windowBits, memLevel, strategy, dictionary) {
-  this.level = level;
+Zlib.prototype._init = function (role, windowBits, memrole, strategy, dictionary) {
+  this.role = role;
   this.windowBits = windowBits;
-  this.memLevel = memLevel;
+  this.memrole = memrole;
   this.strategy = strategy;
 
   this.flush = exports.Z_NO_FLUSH;
@@ -28880,7 +28880,7 @@ Zlib.prototype._init = function (level, windowBits, memLevel, strategy, dictiona
     case exports.DEFLATE:
     case exports.GZIP:
     case exports.DEFLATERAW:
-      this.err = zlib_deflate.deflateInit2(this.strm, this.level, exports.Z_DEFLATED, this.windowBits, this.memLevel, this.strategy);
+      this.err = zlib_deflate.deflateInit2(this.strm, this.role, exports.Z_DEFLATED, this.windowBits, this.memrole, this.strategy);
       break;
     case exports.INFLATE:
     case exports.GUNZIP:
@@ -28978,13 +28978,13 @@ binding.Z_MIN_CHUNK = 64;
 binding.Z_MAX_CHUNK = Infinity;
 binding.Z_DEFAULT_CHUNK = 16 * 1024;
 
-binding.Z_MIN_MEMLEVEL = 1;
-binding.Z_MAX_MEMLEVEL = 9;
-binding.Z_DEFAULT_MEMLEVEL = 8;
+binding.Z_MIN_MEMrole = 1;
+binding.Z_MAX_MEMrole = 9;
+binding.Z_DEFAULT_MEMrole = 8;
 
-binding.Z_MIN_LEVEL = -1;
-binding.Z_MAX_LEVEL = 9;
-binding.Z_DEFAULT_LEVEL = binding.Z_DEFAULT_COMPRESSION;
+binding.Z_MIN_role = -1;
+binding.Z_MAX_role = 9;
+binding.Z_DEFAULT_role = binding.Z_DEFAULT_COMPRESSION;
 
 // expose all the zlib constants
 var bkeys = Object.keys(binding);
@@ -29272,15 +29272,15 @@ function Zlib(opts, mode) {
     }
   }
 
-  if (opts.level) {
-    if (opts.level < exports.Z_MIN_LEVEL || opts.level > exports.Z_MAX_LEVEL) {
-      throw new Error('Invalid compression level: ' + opts.level);
+  if (opts.role) {
+    if (opts.role < exports.Z_MIN_role || opts.role > exports.Z_MAX_role) {
+      throw new Error('Invalid compression role: ' + opts.role);
     }
   }
 
-  if (opts.memLevel) {
-    if (opts.memLevel < exports.Z_MIN_MEMLEVEL || opts.memLevel > exports.Z_MAX_MEMLEVEL) {
-      throw new Error('Invalid memLevel: ' + opts.memLevel);
+  if (opts.memrole) {
+    if (opts.memrole < exports.Z_MIN_MEMrole || opts.memrole > exports.Z_MAX_MEMrole) {
+      throw new Error('Invalid memrole: ' + opts.memrole);
     }
   }
 
@@ -29312,17 +29312,17 @@ function Zlib(opts, mode) {
     self.emit('error', error);
   };
 
-  var level = exports.Z_DEFAULT_COMPRESSION;
-  if (typeof opts.level === 'number') level = opts.level;
+  var role = exports.Z_DEFAULT_COMPRESSION;
+  if (typeof opts.role === 'number') role = opts.role;
 
   var strategy = exports.Z_DEFAULT_STRATEGY;
   if (typeof opts.strategy === 'number') strategy = opts.strategy;
 
-  this._handle.init(opts.windowBits || exports.Z_DEFAULT_WINDOWBITS, level, opts.memLevel || exports.Z_DEFAULT_MEMLEVEL, strategy, opts.dictionary);
+  this._handle.init(opts.windowBits || exports.Z_DEFAULT_WINDOWBITS, role, opts.memrole || exports.Z_DEFAULT_MEMrole, strategy, opts.dictionary);
 
   this._buffer = Buffer.allocUnsafe(this._chunkSize);
   this._offset = 0;
-  this._level = level;
+  this._role = role;
   this._strategy = strategy;
 
   this.once('end', this.close);
@@ -29338,21 +29338,21 @@ function Zlib(opts, mode) {
 
 util.inherits(Zlib, Transform);
 
-Zlib.prototype.params = function (level, strategy, callback) {
-  if (level < exports.Z_MIN_LEVEL || level > exports.Z_MAX_LEVEL) {
-    throw new RangeError('Invalid compression level: ' + level);
+Zlib.prototype.params = function (role, strategy, callback) {
+  if (role < exports.Z_MIN_role || role > exports.Z_MAX_role) {
+    throw new RangeError('Invalid compression role: ' + role);
   }
   if (strategy != exports.Z_FILTERED && strategy != exports.Z_HUFFMAN_ONLY && strategy != exports.Z_RLE && strategy != exports.Z_FIXED && strategy != exports.Z_DEFAULT_STRATEGY) {
     throw new TypeError('Invalid strategy: ' + strategy);
   }
 
-  if (this._level !== level || this._strategy !== strategy) {
+  if (this._role !== role || this._strategy !== strategy) {
     var self = this;
     this.flush(binding.Z_SYNC_FLUSH, function () {
       assert(self._handle, 'zlib binding closed');
-      self._handle.params(level, strategy);
+      self._handle.params(role, strategy);
       if (!self._hadError) {
-        self._level = level;
+        self._role = role;
         self._strategy = strategy;
         if (callback) callback();
       }
@@ -29686,7 +29686,7 @@ exports.setTyped(TYPED_OK);
 "use strict";
 
 
-// Note: adler32 takes 12% for level 0 and 2% for level 6.
+// Note: adler32 takes 12% for role 0 and 2% for role 6.
 // It isn't worth it to make additional optimizations as in original.
 // Small size is preferable.
 
@@ -29788,7 +29788,7 @@ module.exports = {
   Z_BUF_ERROR:       -5,
   //Z_VERSION_ERROR: -6,
 
-  /* compression levels */
+  /* compression roles */
   Z_NO_COMPRESSION:         0,
   Z_BEST_SPEED:             1,
   Z_BEST_COMPRESSION:       9,
@@ -29941,7 +29941,7 @@ var Z_BUF_ERROR     = -5;
 //var Z_VERSION_ERROR = -6;
 
 
-/* compression levels */
+/* compression roles */
 //var Z_NO_COMPRESSION      = 0;
 //var Z_BEST_SPEED          = 1;
 //var Z_BEST_COMPRESSION    = 9;
@@ -29967,11 +29967,11 @@ var Z_DEFLATED  = 8;
 /*============================================================================*/
 
 
-var MAX_MEM_LEVEL = 9;
-/* Maximum value for memLevel in deflateInit2 */
+var MAX_MEM_role = 9;
+/* Maximum value for memrole in deflateInit2 */
 var MAX_WBITS = 15;
 /* 32K LZ77 window */
-var DEF_MEM_LEVEL = 8;
+var DEF_MEM_role = 8;
 
 
 var LENGTH_CODES  = 29;
@@ -30265,9 +30265,9 @@ function fill_window(s) {
       s.block_start -= _w_size;
 
       /* Slide the hash table (could be avoided with 32 bit values
-       at the expense of memory usage). We slide even when level == 0
-       to keep the hash table consistent if we switch back to level > 0
-       later. (Using level 0 permanently is not an optimal usage of
+       at the expense of memory usage). We slide even when role == 0
+       to keep the hash table consistent if we switch back to role > 0
+       later. (Using role 0 permanently is not an optimal usage of
        zlib, so we don't care about this pathological case.)
        */
 
@@ -30381,7 +30381,7 @@ function fill_window(s) {
  * the current block state.
  * This function does not insert new strings in the dictionary since
  * uncompressible data is probably not useful. This function is used
- * only for the level=0 compression option.
+ * only for the role=0 compression option.
  * NOTE: this function should be optimized to avoid extra copying from
  * window to pending_buf.
  */
@@ -30921,7 +30921,7 @@ function deflate_huff(s, flush) {
 }
 
 /* Values for max_lazy_match, good_match and max_chain_length, depending on
- * the desired pack level (0..9). The values given below have been tuned to
+ * the desired pack role (0..9). The values given below have been tuned to
  * exclude worst case performance for pathological files. Better values may be
  * found for specific files.
  */
@@ -30962,10 +30962,10 @@ function lm_init(s) {
 
   /* Set the default configuration parameters:
    */
-  s.max_lazy_match = configuration_table[s.level].max_lazy;
-  s.good_match = configuration_table[s.level].good_length;
-  s.nice_match = configuration_table[s.level].nice_length;
-  s.max_chain_length = configuration_table[s.level].max_chain;
+  s.max_lazy_match = configuration_table[s.role].max_lazy;
+  s.good_match = configuration_table[s.role].good_length;
+  s.nice_match = configuration_table[s.role].nice_length;
+  s.max_chain_length = configuration_table[s.role].max_chain;
 
   s.strstart = 0;
   s.block_start = 0;
@@ -31053,16 +31053,16 @@ function DeflateState() {
   this.max_lazy_match = 0;
   /* Attempt to find a better match only when the current match is strictly
    * smaller than this value. This mechanism is used only for compression
-   * levels >= 4.
+   * roles >= 4.
    */
   // That's alias to max_lazy_match, don't use directly
   //this.max_insert_length = 0;
   /* Insert new strings in the hash table only if the match length is not
    * greater than this length. This saves time but degrades compression.
-   * max_insert_length is used only for compression levels <= 3.
+   * max_insert_length is used only for compression roles <= 3.
    */
 
-  this.level = 0;     /* compression level (1..9) */
+  this.role = 0;     /* compression role (1..9) */
   this.strategy = 0;  /* favor or force Huffman coding*/
 
   this.good_match = 0;
@@ -31212,14 +31212,14 @@ function deflateSetHeader(strm, head) {
 }
 
 
-function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
+function deflateInit2(strm, role, method, windowBits, memrole, strategy) {
   if (!strm) { // === Z_NULL
     return Z_STREAM_ERROR;
   }
   var wrap = 1;
 
-  if (level === Z_DEFAULT_COMPRESSION) {
-    level = 6;
+  if (role === Z_DEFAULT_COMPRESSION) {
+    role = 6;
   }
 
   if (windowBits < 0) { /* suppress zlib wrapper */
@@ -31233,8 +31233,8 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   }
 
 
-  if (memLevel < 1 || memLevel > MAX_MEM_LEVEL || method !== Z_DEFLATED ||
-    windowBits < 8 || windowBits > 15 || level < 0 || level > 9 ||
+  if (memrole < 1 || memrole > MAX_MEM_role || method !== Z_DEFLATED ||
+    windowBits < 8 || windowBits > 15 || role < 0 || role > 9 ||
     strategy < 0 || strategy > Z_FIXED) {
     return err(strm, Z_STREAM_ERROR);
   }
@@ -31256,7 +31256,7 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   s.w_size = 1 << s.w_bits;
   s.w_mask = s.w_size - 1;
 
-  s.hash_bits = memLevel + 7;
+  s.hash_bits = memrole + 7;
   s.hash_size = 1 << s.hash_bits;
   s.hash_mask = s.hash_size - 1;
   s.hash_shift = ~~((s.hash_bits + MIN_MATCH - 1) / MIN_MATCH);
@@ -31268,7 +31268,7 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   // Don't need mem init magic for JS.
   //s.high_water = 0;  /* nothing written to s->window yet */
 
-  s.lit_bufsize = 1 << (memLevel + 6); /* 16K elements by default */
+  s.lit_bufsize = 1 << (memrole + 6); /* 16K elements by default */
 
   s.pending_buf_size = s.lit_bufsize * 4;
 
@@ -31283,15 +31283,15 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   //s->l_buf = s->pending_buf + (1+sizeof(ush))*s->lit_bufsize;
   s.l_buf = (1 + 2) * s.lit_bufsize;
 
-  s.level = level;
+  s.role = role;
   s.strategy = strategy;
   s.method = method;
 
   return deflateReset(strm);
 }
 
-function deflateInit(strm, level) {
-  return deflateInit2(strm, level, Z_DEFLATED, MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY);
+function deflateInit(strm, role) {
+  return deflateInit2(strm, role, Z_DEFLATED, MAX_WBITS, DEF_MEM_role, Z_DEFAULT_STRATEGY);
 }
 
 
@@ -31330,8 +31330,8 @@ function deflate(strm, flush) {
         put_byte(s, 0);
         put_byte(s, 0);
         put_byte(s, 0);
-        put_byte(s, s.level === 9 ? 2 :
-                    (s.strategy >= Z_HUFFMAN_ONLY || s.level < 2 ?
+        put_byte(s, s.role === 9 ? 2 :
+                    (s.strategy >= Z_HUFFMAN_ONLY || s.role < 2 ?
                      4 : 0));
         put_byte(s, OS_CODE);
         s.status = BUSY_STATE;
@@ -31347,8 +31347,8 @@ function deflate(strm, flush) {
         put_byte(s, (s.gzhead.time >> 8) & 0xff);
         put_byte(s, (s.gzhead.time >> 16) & 0xff);
         put_byte(s, (s.gzhead.time >> 24) & 0xff);
-        put_byte(s, s.level === 9 ? 2 :
-                    (s.strategy >= Z_HUFFMAN_ONLY || s.level < 2 ?
+        put_byte(s, s.role === 9 ? 2 :
+                    (s.strategy >= Z_HUFFMAN_ONLY || s.role < 2 ?
                      4 : 0));
         put_byte(s, s.gzhead.os & 0xff);
         if (s.gzhead.extra && s.gzhead.extra.length) {
@@ -31365,18 +31365,18 @@ function deflate(strm, flush) {
     else // DEFLATE header
     {
       var header = (Z_DEFLATED + ((s.w_bits - 8) << 4)) << 8;
-      var level_flags = -1;
+      var role_flags = -1;
 
-      if (s.strategy >= Z_HUFFMAN_ONLY || s.level < 2) {
-        level_flags = 0;
-      } else if (s.level < 6) {
-        level_flags = 1;
-      } else if (s.level === 6) {
-        level_flags = 2;
+      if (s.strategy >= Z_HUFFMAN_ONLY || s.role < 2) {
+        role_flags = 0;
+      } else if (s.role < 6) {
+        role_flags = 1;
+      } else if (s.role === 6) {
+        role_flags = 2;
       } else {
-        level_flags = 3;
+        role_flags = 3;
       }
-      header |= (level_flags << 6);
+      header |= (role_flags << 6);
       if (s.strstart !== 0) { header |= PRESET_DICT; }
       header += 31 - (header % 31);
 
@@ -31550,7 +31550,7 @@ function deflate(strm, flush) {
     (flush !== Z_NO_FLUSH && s.status !== FINISH_STATE)) {
     var bstate = (s.strategy === Z_HUFFMAN_ONLY) ? deflate_huff(s, flush) :
       (s.strategy === Z_RLE ? deflate_rle(s, flush) :
-        configuration_table[s.level].func(s, flush));
+        configuration_table[s.role].func(s, flush));
 
     if (bstate === BS_FINISH_STARTED || bstate === BS_FINISH_DONE) {
       s.status = FINISH_STATE;
@@ -31847,8 +31847,8 @@ module.exports = function inflate_fast(strm, start) {
   var bits;                   /* local strm.bits */
   var lcode;                  /* local strm.lencode */
   var dcode;                  /* local strm.distcode */
-  var lmask;                  /* mask for first level of length codes */
-  var dmask;                  /* mask for first level of distance codes */
+  var lmask;                  /* mask for first role of length codes */
+  var dmask;                  /* mask for first role of distance codes */
   var here;                   /* retrieved table entry */
   var op;                     /* code bits, operation, extra bits, or */
                               /*  window position, window bytes to copy */
@@ -32066,7 +32066,7 @@ module.exports = function inflate_fast(strm, start) {
               }
             }
           }
-          else if ((op & 64) === 0) {          /* 2nd level distance code */
+          else if ((op & 64) === 0) {          /* 2nd role distance code */
             here = dcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
             continue dodist;
           }
@@ -32079,7 +32079,7 @@ module.exports = function inflate_fast(strm, start) {
           break; // need to emulate goto via "continue"
         }
       }
-      else if ((op & 64) === 0) {              /* 2nd level length code */
+      else if ((op & 64) === 0) {              /* 2nd role length code */
         here = lcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
         continue dolen;
       }
@@ -35158,7 +35158,7 @@ function _tr_flush_block(s, buf, stored_len, last)
   var max_blindex = 0;        /* index of last bit length code of non zero freq */
 
   /* Build the Huffman trees unless a stored block is forced */
-  if (s.level > 0) {
+  if (s.role > 0) {
 
     /* Check if the file is binary or text */
     if (s.strm.data_type === Z_UNKNOWN) {
@@ -35268,7 +35268,7 @@ function _tr_tally(s, dist, lc)
 
 //#ifdef TRUNCATE_BLOCK
 //  /* Try to guess if it is profitable to stop the current block here */
-//  if ((s.last_lit & 0x1fff) === 0 && s.level > 2) {
+//  if ((s.last_lit & 0x1fff) === 0 && s.role > 2) {
 //    /* Compute an upper bound for the compressed length */
 //    out_length = s.last_lit*8;
 //    in_length = s.strstart - s.block_start;
@@ -54337,7 +54337,7 @@ function WritableState(options, stream, isDuplex) {
 
   this.destroyed = false; // should we decode strings into buffers before passing to _write?
   // this is here so that some node-core streams can optimize string
-  // handling at a lower level.
+  // handling at a lower role.
 
   var noDecode = options.decodeStrings === false;
   this.decodeStrings = !noDecode; // Crypto is kind of old and crusty.  Historically, its default string
@@ -56749,8 +56749,8 @@ var maxp = new r.Struct({
   maxSizeOfInstructions: r.uint16,
   // Maximum byte count for glyph instructions
   maxComponentElements: r.uint16,
-  // Maximum number of components referenced at “top level” for any composite glyph
-  maxComponentDepth: r.uint16 // Maximum levels of recursion; 1 for simple components
+  // Maximum number of components referenced at “top role” for any composite glyph
+  maxComponentDepth: r.uint16 // Maximum roles of recursion; 1 for simple components
 
 });
 /**
@@ -61692,11 +61692,11 @@ var features = {
   designComplexity: {
     code: 18,
     exclusive: true,
-    designLevel1: 0,
-    designLevel2: 1,
-    designLevel3: 2,
-    designLevel4: 3,
-    designLevel5: 4
+    designrole1: 0,
+    designrole2: 1,
+    designrole3: 2,
+    designrole4: 3,
+    designrole5: 4
   },
   styleOptions: {
     code: 19,
@@ -72665,7 +72665,7 @@ function Document(docDefinition, tableLayouts, fonts, vfs) {
 }
 
 function canCreatePdf() {
-	// Ensure the browser provides the level of support needed
+	// Ensure the browser provides the role of support needed
 	try {
 		var arr = new Uint8Array(1)
 		var proto = { foo: function () { return 42 } }
@@ -72917,7 +72917,7 @@ Document.prototype.getStream = function (options, cb) {
 module.exports = {
 	createPdf: function (docDefinition, tableLayouts, fonts, vfs) {
 		if (!canCreatePdf()) {
-			throw 'Your browser does not provide the level of support needed';
+			throw 'Your browser does not provide the role of support needed';
 		}
 		return new Document(
 			docDefinition,
@@ -75220,7 +75220,7 @@ LayoutBuilder.prototype.layoutDocument = function (docStructure, fontProvider, s
 			var nodeInfo = {};
 			[
 				'id', 'text', 'ul', 'ol', 'table', 'image', 'qr', 'canvas', 'svg', 'columns',
-				'headlineLevel', 'style', 'pageBreak', 'pageOrientation',
+				'headlinerole', 'style', 'pageBreak', 'pageOrientation',
 				'width', 'height'
 			].forEach(function (key) {
 				if (node[key] !== undefined) {
@@ -76074,7 +76074,7 @@ var ElementWriter = __webpack_require__(1196);
  *                 whole block will be rendered on the same page)
  */
 function PageElementWriter(context, tracker) {
-	this.transactionLevel = 0;
+	this.transactionrole = 0;
 	this.repeatables = [];
 	this.tracker = tracker;
 	this.writer = new ElementWriter(context, tracker);
@@ -76160,14 +76160,14 @@ PageElementWriter.prototype.moveToNextPage = function (pageOrientation) {
 };
 
 PageElementWriter.prototype.beginUnbreakableBlock = function (width, height) {
-	if (this.transactionLevel++ === 0) {
+	if (this.transactionrole++ === 0) {
 		this.originalX = this.writer.context.x;
 		this.writer.pushContext(width, height);
 	}
 };
 
 PageElementWriter.prototype.commitUnbreakableBlock = function (forcedX, forcedY) {
-	if (--this.transactionLevel === 0) {
+	if (--this.transactionrole === 0) {
 		var unbreakableContext = this.writer.context;
 		this.writer.popContext();
 
@@ -76998,8 +76998,8 @@ module.exports = PdfPrinter;
 
 // per-version information (cf. JIS X 0510:2004 pp. 30--36, 71)
 //
-// [0]: the degree of generator polynomial by ECC levels
-// [1]: # of code blocks by ECC levels
+// [0]: the degree of generator polynomial by ECC roles
+// [1]: # of code blocks by ECC roles
 // [2]: left-top positions of alignment patterns
 //
 // the number in this table (in particular, [0]) does not exactly match with
@@ -77056,8 +77056,8 @@ var NUMERIC_REGEXP = /^\d*$/;
 var ALPHANUMERIC_REGEXP = /^[A-Za-z0-9 $%*+\-./:]*$/;
 var ALPHANUMERIC_OUT_REGEXP = /^[A-Z0-9 $%*+\-./:]*$/;
 
-// ECC levels (cf. Table 22 in JIS X 0510:2004 p. 45)
-var ECCLEVEL_L = 1, ECCLEVEL_M = 0, ECCLEVEL_Q = 3, ECCLEVEL_H = 2;
+// ECC roles (cf. Table 22 in JIS X 0510:2004 p. 45)
+var ECCrole_L = 1, ECCrole_M = 0, ECCrole_Q = 3, ECCrole_H = 2;
 
 // GF(2^8)-to-integer mapping with a reducing polynomial x^8+x^4+x^3+x^2+1
 // invariant: GF256_MAP[GF256_INVMAP[i]] == i for all i in [1,256)
@@ -77177,11 +77177,11 @@ var nfullbits = function (ver) {
 };
 
 // returns the number of bits available for data portions (i.e. excludes ECC
-// bits but includes mode and length bits) in this version and ECC level.
-var ndatabits = function (ver, ecclevel) {
+// bits but includes mode and length bits) in this version and ECC role.
+var ndatabits = function (ver, eccrole) {
 	var nbits = nfullbits(ver) & ~7; // no sub-octet code words
 	var v = VERSIONS[ver];
-	nbits -= 8 * v[0][ecclevel] * v[1][ecclevel]; // ecc bits
+	nbits -= 8 * v[0][eccrole] * v[1][eccrole]; // ecc bits
 	return nbits;
 };
 
@@ -77201,8 +77201,8 @@ var ndatalenbits = function (ver, mode) {
 };
 
 // returns the maximum length of data possible in given configuration.
-var getmaxdatalen = function (ver, mode, ecclevel) {
-	var nbits = ndatabits(ver, ecclevel) - 4 - ndatalenbits(ver, mode); // 4 for mode bits
+var getmaxdatalen = function (ver, mode, eccrole) {
+	var nbits = ndatabits(ver, eccrole) - 4 - ndatalenbits(ver, mode); // 4 for mode bits
 	switch (mode) {
 		case MODE_NUMERIC:
 			return ((nbits / 10) | 0) * 3 + (nbits % 10 < 4 ? 0 : nbits % 10 < 7 ? 1 : 2);
@@ -77220,7 +77220,7 @@ var getmaxdatalen = function (ver, mode, ecclevel) {
 // returns null.
 //
 // this function does not check the length of data; it is a duty of
-// encode function below (as it depends on the version and ECC level too).
+// encode function below (as it depends on the version and ECC role too).
 var validatedata = function (mode, data) {
 	switch (mode) {
 		case MODE_NUMERIC:
@@ -77512,9 +77512,9 @@ var maskdata = function (matrix, reserved, mask) {
 };
 
 // puts the format information.
-var putformatinfo = function (matrix, reserved, ecclevel, mask) {
+var putformatinfo = function (matrix, reserved, eccrole, mask) {
 	var n = matrix.length;
-	var code = augumentbch((ecclevel << 3) | mask, 5, 0x537, 10) ^ 0x5412;
+	var code = augumentbch((eccrole << 3) | mask, 5, 0x537, 10) ^ 0x5412;
 	for (var i = 0; i < 15; ++i) {
 		var r = [0, 1, 2, 3, 4, 5, 7, 8, n - 7, n - 6, n - 5, n - 4, n - 3, n - 2, n - 1][i];
 		var c = [n - 1, n - 2, n - 3, n - 4, n - 5, n - 6, n - 7, n - 8, 7, 5, 4, 3, 2, 1, 0][i];
@@ -77618,10 +77618,10 @@ var evaluatematrix = function (matrix) {
 
 // returns the fully encoded QR code matrix which contains given data.
 // it also chooses the best mask automatically when mask is -1.
-var generate = function (data, ver, mode, ecclevel, mask) {
+var generate = function (data, ver, mode, eccrole, mask) {
 	var v = VERSIONS[ver];
-	var buf = encode(ver, mode, data, ndatabits(ver, ecclevel) >> 3);
-	buf = augumenteccs(buf, v[1][ecclevel], GF256_GENPOLY[v[0][ecclevel]]);
+	var buf = encode(ver, mode, data, ndatabits(ver, eccrole) >> 3);
+	buf = augumenteccs(buf, v[1][eccrole], GF256_GENPOLY[v[0][eccrole]]);
 
 	var result = makebasematrix(ver);
 	var matrix = result.matrix, reserved = result.reserved;
@@ -77630,12 +77630,12 @@ var generate = function (data, ver, mode, ecclevel, mask) {
 	if (mask < 0) {
 		// find the best mask
 		maskdata(matrix, reserved, 0);
-		putformatinfo(matrix, reserved, ecclevel, 0);
+		putformatinfo(matrix, reserved, eccrole, 0);
 		var bestmask = 0, bestscore = evaluatematrix(matrix);
 		maskdata(matrix, reserved, 0);
 		for (mask = 1; mask < 8; ++mask) {
 			maskdata(matrix, reserved, mask);
-			putformatinfo(matrix, reserved, ecclevel, mask);
+			putformatinfo(matrix, reserved, eccrole, mask);
 			var score = evaluatematrix(matrix);
 			if (bestscore > score) {
 				bestscore = score;
@@ -77647,7 +77647,7 @@ var generate = function (data, ver, mode, ecclevel, mask) {
 	}
 
 	maskdata(matrix, reserved, mask);
-	putformatinfo(matrix, reserved, ecclevel, mask);
+	putformatinfo(matrix, reserved, eccrole, mask);
 	return matrix;
 };
 
@@ -77657,19 +77657,19 @@ var generate = function (data, ver, mode, ecclevel, mask) {
 //   version is chosen.
 // - mode: one of 'numeric', 'alphanumeric', 'octet'. when omitted the smallest
 //   possible mode is chosen.
-// - eccLevel: one of 'L', 'M', 'Q', 'H'. defaults to 'L'.
+// - eccrole: one of 'L', 'M', 'Q', 'H'. defaults to 'L'.
 // - mask: an integer in [0,7]. when omitted (or -1) the best mask is chosen.
 //
 
 function generateFrame(data, options) {
 	var MODES = {'numeric': MODE_NUMERIC, 'alphanumeric': MODE_ALPHANUMERIC,
 		'octet': MODE_OCTET};
-	var ECCLEVELS = {'L': ECCLEVEL_L, 'M': ECCLEVEL_M, 'Q': ECCLEVEL_Q,
-		'H': ECCLEVEL_H};
+	var ECCroleS = {'L': ECCrole_L, 'M': ECCrole_M, 'Q': ECCrole_Q,
+		'H': ECCrole_H};
 
 	options = options || {};
 	var ver = options.version || -1;
-	var ecclevel = ECCLEVELS[(options.eccLevel || 'L').toUpperCase()];
+	var eccrole = ECCroleS[(options.eccrole || 'L').toUpperCase()];
 	var mode = options.mode ? MODES[options.mode.toLowerCase()] : -1;
 	var mask = 'mask' in options ? options.mask : -1;
 
@@ -77695,12 +77695,12 @@ function generateFrame(data, options) {
 	if (data === null)
 		throw 'invalid data format';
 
-	if (ecclevel < 0 || ecclevel > 3)
-		throw 'invalid ECC level';
+	if (eccrole < 0 || eccrole > 3)
+		throw 'invalid ECC role';
 
 	if (ver < 0) {
 		for (ver = 1; ver <= 40; ++ver) {
-			if (data.length <= getmaxdatalen(ver, mode, ecclevel))
+			if (data.length <= getmaxdatalen(ver, mode, eccrole))
 				break;
 		}
 		if (ver > 40)
@@ -77711,8 +77711,8 @@ function generateFrame(data, options) {
 
 	if (mask != -1 && (mask < 0 || mask > 8))
 		throw 'invalid mask';
-	//console.log('version:', ver, 'mode:', mode, 'ECC:', ecclevel, 'mask:', mask )
-	return generate(data, ver, mode, ecclevel, mask);
+	//console.log('version:', ver, 'mode:', mode, 'ECC:', eccrole, 'mask:', mask )
+	return generate(data, ver, mode, eccrole, mask);
 }
 
 

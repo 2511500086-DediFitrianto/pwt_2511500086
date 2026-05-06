@@ -10,6 +10,14 @@
 
 <?php
 include "config/koneksi.php";
+include "config/cek_admin.php";
+if($_SESSION['role'] != 'admin'){
+    echo "<script>
+        alert('Akses ditolak!');
+        window.location='starter.php?page=Jadwal_kelas';
+    </script>";
+    exit;
+}
 
 if(isset($_POST['tambah'])){
     $Id_kelas   = $_POST['Id_kelas'];

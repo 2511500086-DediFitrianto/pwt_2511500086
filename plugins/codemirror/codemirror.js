@@ -318,7 +318,7 @@
     for (var i = 0; i < order.length; ++i) {
       var part = order[i];
       if (part.from < to && part.to > from || from == to && part.to == from) {
-        f(Math.max(part.from, from), Math.min(part.to, to), part.level == 1 ? "rtl" : "ltr", i);
+        f(Math.max(part.from, from), Math.min(part.to, to), part.role == 1 ? "rtl" : "ltr", i);
         found = true;
       }
     }
@@ -365,7 +365,7 @@
   // N (ON):  Other Neutrals
 
   // Returns null if characters are ordered as they appear
-  // (left-to-right), or an array of sections ({from, to, level}
+  // (left-to-right), or an array of sections ({from, to, role}
   // objects) in the order in which they occur visually.
   var bidiOrdering = (function() {
     // Character types for codepoints 0 to 0xff
@@ -385,8 +385,8 @@
     var bidiRE = /[\u0590-\u05f4\u0600-\u06ff\u0700-\u08ac]/;
     var isNeutral = /[stwN]/, isStrong = /[LRr]/, countsAsLeft = /[Lb1n]/, countsAsNum = /[1n]/;
 
-    function BidiSpan(level, from, to) {
-      this.level = level;
+    function BidiSpan(role, from, to) {
+      this.role = role;
       this.from = from; this.to = to;
     }
 
@@ -398,9 +398,9 @@
       for (var i = 0; i < len; ++i)
         { types.push(charType(str.charCodeAt(i))); }
 
-      // W1. Examine each non-spacing mark (NSM) in the level run, and
+      // W1. Examine each non-spacing mark (NSM) in the role run, and
       // change the type of the NSM to the type of the previous
-      // character. If the NSM is at the start of the level run, it will
+      // character. If the NSM is at the start of the role run, it will
       // get the type of sor.
       for (var i$1 = 0, prev = outerType; i$1 < len; ++i$1) {
         var type = types[i$1];
@@ -458,8 +458,8 @@
       // N1. A sequence of neutrals takes the direction of the
       // surrounding strong text if the text on both sides has the same
       // direction. European and Arabic numbers act as if they were R in
-      // terms of their influence on neutrals. Start-of-level-run (sor)
-      // and end-of-level-run (eor) are used at level run boundaries.
+      // terms of their influence on neutrals. Start-of-role-run (sor)
+      // and end-of-role-run (eor) are used at role run boundaries.
       // N2. Any remaining neutrals take the embedding direction.
       for (var i$6 = 0; i$6 < len; ++i$6) {
         if (isNeutral.test(types[i$6])) {
@@ -474,10 +474,10 @@
       }
 
       // Here we depart from the documented algorithm, in order to avoid
-      // building up an actual levels array. Since there are only three
-      // levels (0, 1, 2) in an implementation that doesn't take
+      // building up an actual roles array. Since there are only three
+      // roles (0, 1, 2) in an implementation that doesn't take
       // explicit embedding into account, we can build up the order on
-      // the fly, without following the level-based algorithm.
+      // the fly, without following the role-based algorithm.
       var order = [], m;
       for (var i$7 = 0; i$7 < len;) {
         if (countsAsLeft.test(types[i$7])) {
@@ -501,11 +501,11 @@
         }
       }
       if (direction == "ltr") {
-        if (order[0].level == 1 && (m = str.match(/^\s+/))) {
+        if (order[0].role == 1 && (m = str.match(/^\s+/))) {
           order[0].from = m[0].length;
           order.unshift(new BidiSpan(0, 0, m[0].length));
         }
-        if (lst(order).level == 1 && (m = str.match(/\s+$/))) {
+        if (lst(order).role == 1 && (m = str.match(/\s+$/))) {
           lst(order).to -= m[0].length;
           order.push(new BidiSpan(0, len - m[0].length, len));
         }
@@ -1733,7 +1733,7 @@
   // information about line-wide styles that were set by the mode.
   function buildLineContent(cm, lineView) {
     // The padding-right forces the element to have a 'border', which
-    // is needed on Webkit to be able to get line-level bounding
+    // is needed on Webkit to be able to get line-role bounding
     // rectangles for it (in measureChar).
     var content = eltP("span", null, null, webkit ? "padding-right: .1px" : null);
     var builder = {pre: eltP("pre", [content], "CodeMirror-line"), content: content,
@@ -2676,7 +2676,7 @@
     if (!order) { return get(sticky == "before" ? ch - 1 : ch, sticky == "before") }
 
     function getBidi(ch, partPos, invert) {
-      var part = order[partPos], right = part.level == 1;
+      var part = order[partPos], right = part.role == 1;
       return get(invert ? ch - 1 : ch, right != invert)
     }
     var partPos = getBidiPartAt(order, ch, sticky);
@@ -2767,7 +2767,7 @@
     if (order) {
       var part = (cm.options.lineWrapping ? coordsBidiPartWrapped : coordsBidiPart)
                    (cm, lineObj, lineNo, preparedMeasure, order, x, y);
-      ltr = part.level != 1;
+      ltr = part.role != 1;
       // The awkward -1 offsets are needed because findFirst (called
       // on these below) will treat its first bound as inclusive,
       // second as exclusive, but we want to actually address the
@@ -2825,7 +2825,7 @@
     // ordering. This finds the first part whose end is after the given
     // coordinates.
     var index = findFirst(function (i) {
-      var part = order[i], ltr = part.level != 1;
+      var part = order[i], ltr = part.role != 1;
       return boxIsAfter(cursorCoords(cm, Pos(lineNo, ltr ? part.to : part.from, ltr ? "before" : "after"),
                                      "line", lineObj, preparedMeasure), x, y, true)
     }, 0, order.length - 1);
@@ -2834,7 +2834,7 @@
     // the coordinates, and the coordinates aren't on the same line as
     // that start, move one part back.
     if (index > 0) {
-      var ltr = part.level != 1;
+      var ltr = part.role != 1;
       var start = cursorCoords(cm, Pos(lineNo, ltr ? part.from : part.to, ltr ? "after" : "before"),
                                "line", lineObj, preparedMeasure);
       if (boxIsAfter(start, x, y, true) && start.top > y)
@@ -2859,7 +2859,7 @@
     for (var i = 0; i < order.length; i++) {
       var p = order[i];
       if (p.from >= end || p.to <= begin) { continue }
-      var ltr = p.level != 1;
+      var ltr = p.role != 1;
       var endX = measureCharPrepared(cm, preparedMeasure, ltr ? Math.min(end, p.to) - 1 : Math.max(begin, p.from)).right;
       // Weigh against spans ending before this, so that they are only
       // picked if nothing ends after
@@ -2871,8 +2871,8 @@
     }
     if (!part) { part = order[order.length - 1]; }
     // Clip the part to the wrapped line.
-    if (part.from < begin) { part = {from: begin, to: part.to, level: part.level}; }
-    if (part.to > end) { part = {from: part.from, to: end, level: part.level}; }
+    if (part.from < begin) { part = {from: begin, to: part.to, role: part.role}; }
+    if (part.to > end) { part = {from: part.from, to: end, role: part.role}; }
     return part
   }
 
@@ -5430,7 +5430,7 @@
     }
   }
 
-  // More lower-level change function, handling only a single document
+  // More lower-role change function, handling only a single document
   // (not linked ones).
   function makeChangeSingleDoc(doc, change, selAfter, spans) {
     if (doc.cm && !doc.cm.curOp)
@@ -6889,7 +6889,7 @@
       var order = getOrder(lineObj, cm.doc.direction);
       if (order) {
         var part = dir < 0 ? lst(order) : order[0];
-        var moveInStorageOrder = (dir < 0) == (part.level == 1);
+        var moveInStorageOrder = (dir < 0) == (part.role == 1);
         var sticky = moveInStorageOrder ? "after" : "before";
         var ch;
         // With a wrapped rtl chunk (possibly spanning multiple bidi parts),
@@ -6898,11 +6898,11 @@
         // Thus, in rtl, we are looking for the first (content-order) character
         // in the rtl chunk that is on the last line (that is, the same line
         // as the last (content-order) character).
-        if (part.level > 0 || cm.doc.direction == "rtl") {
+        if (part.role > 0 || cm.doc.direction == "rtl") {
           var prep = prepareMeasureForLine(cm, lineObj);
           ch = dir < 0 ? lineObj.text.length - 1 : 0;
           var targetTop = measureCharPrepared(cm, prep, ch).top;
-          ch = findFirst(function (ch) { return measureCharPrepared(cm, prep, ch).top == targetTop; }, (dir < 0) == (part.level == 1) ? part.from : part.to - 1, ch);
+          ch = findFirst(function (ch) { return measureCharPrepared(cm, prep, ch).top == targetTop; }, (dir < 0) == (part.role == 1) ? part.from : part.to - 1, ch);
           if (sticky == "before") { ch = moveCharLogically(lineObj, ch, 1); }
         } else { ch = dir < 0 ? part.to : part.from; }
         return new Pos(lineNo, ch, sticky)
@@ -6922,7 +6922,7 @@
       start.sticky = "after";
     }
     var partPos = getBidiPartAt(bidi, start.ch, start.sticky), part = bidi[partPos];
-    if (cm.doc.direction == "ltr" && part.level % 2 == 0 && (dir > 0 ? part.to > start.ch : part.from < start.ch)) {
+    if (cm.doc.direction == "ltr" && part.role % 2 == 0 && (dir > 0 ? part.to > start.ch : part.from < start.ch)) {
       // Case 1: We move within an ltr part in an ltr editor. Even with wrapped lines,
       // nothing interesting happens.
       return moveLogically(line, start, dir)
@@ -6937,8 +6937,8 @@
     };
     var wrappedLineExtent = getWrappedLineExtent(start.sticky == "before" ? mv(start, -1) : start.ch);
 
-    if (cm.doc.direction == "rtl" || part.level == 1) {
-      var moveInStorageOrder = (part.level == 1) == (dir < 0);
+    if (cm.doc.direction == "rtl" || part.role == 1) {
+      var moveInStorageOrder = (part.role == 1) == (dir < 0);
       var ch = mv(start, moveInStorageOrder ? 1 : -1);
       if (ch != null && (!moveInStorageOrder ? ch >= part.from && ch >= wrappedLineExtent.begin : ch <= part.to && ch <= wrappedLineExtent.end)) {
         // Case 2: We move within an rtl part or in an rtl editor on the same visual line
@@ -6957,7 +6957,7 @@
 
       for (; partPos >= 0 && partPos < bidi.length; partPos += dir) {
         var part = bidi[partPos];
-        var moveInStorageOrder = (dir > 0) == (part.level != 1);
+        var moveInStorageOrder = (dir > 0) == (part.role != 1);
         var ch = moveInStorageOrder ? wrappedLineExtent.begin : mv(wrappedLineExtent.end, -1);
         if (part.from <= ch && ch < part.to) { return getRes(ch, moveInStorageOrder) }
         ch = moveInStorageOrder ? part.from : mv(part.to, -1);
@@ -7139,7 +7139,7 @@
     var start = lineStart(cm, pos.line);
     var line = getLine(cm.doc, start.line);
     var order = getOrder(line, cm.doc.direction);
-    if (!order || order[0].level == 0) {
+    if (!order || order[0].role == 0) {
       var firstNonWS = Math.max(start.ch, line.text.search(/\S/));
       var inWS = pos.line == start.line && pos.ch <= firstNonWS && pos.ch;
       return Pos(start.line, inWS ? 0 : firstNonWS, start.sticky)
@@ -7621,7 +7621,7 @@
     if (!order) { return range }
     var index = getBidiPartAt(order, anchor.ch, anchor.sticky), part = order[index];
     if (part.from != anchor.ch && part.to != anchor.ch) { return range }
-    var boundary = index + ((part.from == anchor.ch) == (part.level != 1) ? 0 : 1);
+    var boundary = index + ((part.from == anchor.ch) == (part.role != 1) ? 0 : 1);
     if (boundary == 0 || boundary == order.length) { return range }
 
     // Compute the relative visual position of the head compared to the
@@ -7631,7 +7631,7 @@
       leftSide = (head.line - anchor.line) * (cm.doc.direction == "ltr" ? 1 : -1) > 0;
     } else {
       var headIndex = getBidiPartAt(order, head.ch, head.sticky);
-      var dir = headIndex - index || (head.ch - anchor.ch) * (part.level == 1 ? -1 : 1);
+      var dir = headIndex - index || (head.ch - anchor.ch) * (part.role == 1 ? -1 : 1);
       if (headIndex == boundary - 1 || headIndex == boundary)
         { leftSide = dir < 0; }
       else
@@ -7639,7 +7639,7 @@
     }
 
     var usePart = order[boundary + (leftSide ? -1 : 0)];
-    var from = leftSide == (usePart.level == 1);
+    var from = leftSide == (usePart.role == 1);
     var ch = from ? usePart.from : usePart.to, sticky = from ? "after" : "before";
     return anchor.ch == ch && anchor.sticky == sticky ? range : new Range(new Pos(anchor.line, ch, sticky), head)
   }

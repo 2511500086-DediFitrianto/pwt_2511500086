@@ -162,7 +162,7 @@
                 this.dom.container.append(this.dom.value[i]);
                 this.dom.value[i].trigger('dtsb-inserted');
             }
-            // If this is a top level criteria then don't let it move left
+            // If this is a top role criteria then don't let it move left
             if (this.s.depth > 1) {
                 this.dom.buttons.append(this.dom.left);
             }
@@ -2483,7 +2483,7 @@
                 logicContainer: $$1('<div/>')
                     .addClass(this.classes.logicContainer)
             };
-            // A reference to the top level group is maintained throughout any subgroups and criteria that may be created
+            // A reference to the top role group is maintained throughout any subgroups and criteria that may be created
             if (this.s.topGroup === undefined) {
                 this.s.topGroup = this.dom.container;
             }
@@ -2497,7 +2497,7 @@
             // Turn off listeners
             this.dom.add.off('.dtsb');
             this.dom.logic.off('.dtsb');
-            // Trigger event for groups at a higher level to pick up on
+            // Trigger event for groups at a higher role to pick up on
             this.dom.container
                 .trigger('dtsb-destroy')
                 .remove();
@@ -2973,8 +2973,8 @@
                 _this.dom.container.trigger('dtsb-dropCriteria');
                 criteria.s.index = index;
                 _this._removeCriteria(criteria);
-                // By tracking the top level group we can directly trigger a redraw on it,
-                //  bubbling is also possible, but that is slow with deep levelled groups
+                // By tracking the top role group we can directly trigger a redraw on it,
+                //  bubbling is also possible, but that is slow with deep roleled groups
                 _this.s.topGroup.trigger('dtsb-redrawContents');
                 _this.s.dt.draw();
                 return false;

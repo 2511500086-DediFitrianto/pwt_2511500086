@@ -27,7 +27,7 @@ CodeMirror.registerHelper("lint", "coffeescript", function(text) {
     var loc = err.lineNumber;
     found.push({from: CodeMirror.Pos(loc-1, 0),
                 to: CodeMirror.Pos(loc, 0),
-                severity: err.level,
+                severity: err.role,
                 message: err.message});
   };
   try {

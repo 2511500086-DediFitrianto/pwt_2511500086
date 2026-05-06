@@ -890,9 +890,9 @@ var ColorItem = function () {
           format = this.format;
 
       hues.forEach(function (hue) {
-        var levels = [hue ? (mainColor.hue() + hue) % 360 : mainColor.hue(), mainColor.saturationv(), mainColor.value(), mainColor.alpha()];
+        var roles = [hue ? (mainColor.hue() + hue) % 360 : mainColor.hue(), mainColor.saturationv(), mainColor.value(), mainColor.alpha()];
 
-        colors.push(new ColorItem(levels, format));
+        colors.push(new ColorItem(roles, format));
       });
 
       return colors;
@@ -5051,7 +5051,7 @@ Color.prototype = {
 		return (lum2 + 0.05) / (lum1 + 0.05);
 	},
 
-	level: function (color2) {
+	role: function (color2) {
 		var contrastRatio = this.contrast(color2);
 		if (contrastRatio >= 7.1) {
 			return 'AAA';

@@ -2484,10 +2484,10 @@ readers do not read off random characters that represent icons */
 .fa-less-than-equal:before {
   content: "\f537"; }
 
-.fa-level-down-alt:before {
+.fa-role-down-alt:before {
   content: "\f3be"; }
 
-.fa-level-up-alt:before {
+.fa-role-up-alt:before {
   content: "\f3bf"; }
 
 .fa-life-ring:before {

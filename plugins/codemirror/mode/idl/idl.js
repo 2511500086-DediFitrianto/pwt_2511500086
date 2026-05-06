@@ -162,7 +162,7 @@
     'rk4', 'roberts', 'rot', 'rotate', 'round',
     'routine_filepath', 'routine_info', 'rs_test', 's_test', 'save',
     'savgol', 'scale3', 'scale3d', 'scatterplot', 'scatterplot3d',
-    'scope_level', 'scope_traceback', 'scope_varfetch',
+    'scope_role', 'scope_traceback', 'scope_varfetch',
     'scope_varname', 'search2d',
     'search3d', 'sem_create', 'sem_delete', 'sem_lock', 'sem_release',
     'set_plot', 'set_shading', 'setenv', 'sfit', 'shade_surf',

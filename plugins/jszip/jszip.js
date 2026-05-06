@@ -392,7 +392,7 @@ FlateWorker.prototype.cleanUp = function () {
 FlateWorker.prototype._createPako = function () {
     this._pako = new pako[this._pakoAction]({
         raw: true,
-        level: this._pakoOptions.level || -1 // default compression
+        role: this._pakoOptions.role || -1 // default compression
     });
     var self = this;
     this._pako.onData = function(data) {
@@ -960,8 +960,8 @@ var ZipFileWorker = require('./ZipFileWorker');
 
 /**
  * Find the compression to use.
- * @param {String} fileCompression the compression defined at the file level, if any.
- * @param {String} zipCompression the compression defined at the load() level.
+ * @param {String} fileCompression the compression defined at the file role, if any.
+ * @param {String} zipCompression the compression defined at the load() role.
  * @return {Object} the compression object to use.
  */
 var getCompression = function (fileCompression, zipCompression) {
@@ -976,7 +976,7 @@ var getCompression = function (fileCompression, zipCompression) {
 
 /**
  * Create a worker to generate a zip file.
- * @param {JSZip} zip the JSZip instance at the right root level.
+ * @param {JSZip} zip the JSZip instance at the right root role.
  * @param {Object} options to generate the zip file.
  * @param {String} comment the comment to use.
  */
@@ -1505,7 +1505,7 @@ var out = {
 
 
     /**
-     * Call a callback function for each entry at this folder level.
+     * Call a callback function for each entry at this folder role.
      * @param {Function} cb the callback function:
      * function (relativePath, file) {...}
      * It takes 2 arguments : the relative path and the file.
@@ -4554,7 +4554,7 @@ function race(iterable) {
 }
 
 },{"immediate":36}],38:[function(require,module,exports){
-// Top level file is just a mixin of submodules & constants
+// Top role file is just a mixin of submodules & constants
 'use strict';
 
 var assign    = require('./lib/utils/common').assign;
@@ -4647,9 +4647,9 @@ var Z_DEFLATED  = 8;
  * Creates new deflator instance with specified params. Throws exception
  * on bad params. Supported options:
  *
- * - `level`
+ * - `role`
  * - `windowBits`
- * - `memLevel`
+ * - `memrole`
  * - `strategy`
  * - `dictionary`
  *
@@ -4679,7 +4679,7 @@ var Z_DEFLATED  = 8;
  *   , chunk1 = Uint8Array([1,2,3,4,5,6,7,8,9])
  *   , chunk2 = Uint8Array([10,11,12,13,14,15,16,17,18,19]);
  *
- * var deflate = new pako.Deflate({ level: 3});
+ * var deflate = new pako.Deflate({ role: 3});
  *
  * deflate.push(chunk1, false);
  * deflate.push(chunk2, true);  // true -> last chunk
@@ -4693,11 +4693,11 @@ function Deflate(options) {
   if (!(this instanceof Deflate)) return new Deflate(options);
 
   this.options = utils.assign({
-    level: Z_DEFAULT_COMPRESSION,
+    role: Z_DEFAULT_COMPRESSION,
     method: Z_DEFLATED,
     chunkSize: 16384,
     windowBits: 15,
-    memLevel: 8,
+    memrole: 8,
     strategy: Z_DEFAULT_STRATEGY,
     to: ''
   }, options || {});
@@ -4722,10 +4722,10 @@ function Deflate(options) {
 
   var status = zlib_deflate.deflateInit2(
     this.strm,
-    opt.level,
+    opt.role,
     opt.method,
     opt.windowBits,
-    opt.memLevel,
+    opt.memrole,
     opt.strategy
   );
 
@@ -4899,9 +4899,9 @@ Deflate.prototype.onEnd = function (status) {
  *
  * Supported options are:
  *
- * - level
+ * - role
  * - windowBits
- * - memLevel
+ * - memrole
  * - strategy
  * - dictionary
  *
@@ -5054,7 +5054,7 @@ var toString = Object.prototype.toString;
  *   , chunk1 = Uint8Array([1,2,3,4,5,6,7,8,9])
  *   , chunk2 = Uint8Array([10,11,12,13,14,15,16,17,18,19]);
  *
- * var inflate = new pako.Inflate({ level: 3});
+ * var inflate = new pako.Inflate({ role: 3});
  *
  * inflate.push(chunk1, false);
  * inflate.push(chunk2, true);  // true -> last chunk
@@ -5685,7 +5685,7 @@ exports.utf8border = function (buf, max) {
 },{"./common":41}],43:[function(require,module,exports){
 'use strict';
 
-// Note: adler32 takes 12% for level 0 and 2% for level 6.
+// Note: adler32 takes 12% for role 0 and 2% for role 6.
 // It doesn't worth to make additional optimizationa as in original.
 // Small size is preferable.
 
@@ -5781,7 +5781,7 @@ module.exports = {
   Z_BUF_ERROR:       -5,
   //Z_VERSION_ERROR: -6,
 
-  /* compression levels */
+  /* compression roles */
   Z_NO_COMPRESSION:         0,
   Z_BEST_SPEED:             1,
   Z_BEST_COMPRESSION:       9,
@@ -5922,7 +5922,7 @@ var Z_BUF_ERROR     = -5;
 //var Z_VERSION_ERROR = -6;
 
 
-/* compression levels */
+/* compression roles */
 //var Z_NO_COMPRESSION      = 0;
 //var Z_BEST_SPEED          = 1;
 //var Z_BEST_COMPRESSION    = 9;
@@ -5948,11 +5948,11 @@ var Z_DEFLATED  = 8;
 /*============================================================================*/
 
 
-var MAX_MEM_LEVEL = 9;
-/* Maximum value for memLevel in deflateInit2 */
+var MAX_MEM_role = 9;
+/* Maximum value for memrole in deflateInit2 */
 var MAX_WBITS = 15;
 /* 32K LZ77 window */
-var DEF_MEM_LEVEL = 8;
+var DEF_MEM_role = 8;
 
 
 var LENGTH_CODES  = 29;
@@ -6246,9 +6246,9 @@ function fill_window(s) {
       s.block_start -= _w_size;
 
       /* Slide the hash table (could be avoided with 32 bit values
-       at the expense of memory usage). We slide even when level == 0
-       to keep the hash table consistent if we switch back to level > 0
-       later. (Using level 0 permanently is not an optimal usage of
+       at the expense of memory usage). We slide even when role == 0
+       to keep the hash table consistent if we switch back to role > 0
+       later. (Using role 0 permanently is not an optimal usage of
        zlib, so we don't care about this pathological case.)
        */
 
@@ -6362,7 +6362,7 @@ function fill_window(s) {
  * the current block state.
  * This function does not insert new strings in the dictionary since
  * uncompressible data is probably not useful. This function is used
- * only for the level=0 compression option.
+ * only for the role=0 compression option.
  * NOTE: this function should be optimized to avoid extra copying from
  * window to pending_buf.
  */
@@ -6902,7 +6902,7 @@ function deflate_huff(s, flush) {
 }
 
 /* Values for max_lazy_match, good_match and max_chain_length, depending on
- * the desired pack level (0..9). The values given below have been tuned to
+ * the desired pack role (0..9). The values given below have been tuned to
  * exclude worst case performance for pathological files. Better values may be
  * found for specific files.
  */
@@ -6943,10 +6943,10 @@ function lm_init(s) {
 
   /* Set the default configuration parameters:
    */
-  s.max_lazy_match = configuration_table[s.level].max_lazy;
-  s.good_match = configuration_table[s.level].good_length;
-  s.nice_match = configuration_table[s.level].nice_length;
-  s.max_chain_length = configuration_table[s.level].max_chain;
+  s.max_lazy_match = configuration_table[s.role].max_lazy;
+  s.good_match = configuration_table[s.role].good_length;
+  s.nice_match = configuration_table[s.role].nice_length;
+  s.max_chain_length = configuration_table[s.role].max_chain;
 
   s.strstart = 0;
   s.block_start = 0;
@@ -7034,16 +7034,16 @@ function DeflateState() {
   this.max_lazy_match = 0;
   /* Attempt to find a better match only when the current match is strictly
    * smaller than this value. This mechanism is used only for compression
-   * levels >= 4.
+   * roles >= 4.
    */
   // That's alias to max_lazy_match, don't use directly
   //this.max_insert_length = 0;
   /* Insert new strings in the hash table only if the match length is not
    * greater than this length. This saves time but degrades compression.
-   * max_insert_length is used only for compression levels <= 3.
+   * max_insert_length is used only for compression roles <= 3.
    */
 
-  this.level = 0;     /* compression level (1..9) */
+  this.role = 0;     /* compression role (1..9) */
   this.strategy = 0;  /* favor or force Huffman coding*/
 
   this.good_match = 0;
@@ -7193,14 +7193,14 @@ function deflateSetHeader(strm, head) {
 }
 
 
-function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
+function deflateInit2(strm, role, method, windowBits, memrole, strategy) {
   if (!strm) { // === Z_NULL
     return Z_STREAM_ERROR;
   }
   var wrap = 1;
 
-  if (level === Z_DEFAULT_COMPRESSION) {
-    level = 6;
+  if (role === Z_DEFAULT_COMPRESSION) {
+    role = 6;
   }
 
   if (windowBits < 0) { /* suppress zlib wrapper */
@@ -7214,8 +7214,8 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   }
 
 
-  if (memLevel < 1 || memLevel > MAX_MEM_LEVEL || method !== Z_DEFLATED ||
-    windowBits < 8 || windowBits > 15 || level < 0 || level > 9 ||
+  if (memrole < 1 || memrole > MAX_MEM_role || method !== Z_DEFLATED ||
+    windowBits < 8 || windowBits > 15 || role < 0 || role > 9 ||
     strategy < 0 || strategy > Z_FIXED) {
     return err(strm, Z_STREAM_ERROR);
   }
@@ -7237,7 +7237,7 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   s.w_size = 1 << s.w_bits;
   s.w_mask = s.w_size - 1;
 
-  s.hash_bits = memLevel + 7;
+  s.hash_bits = memrole + 7;
   s.hash_size = 1 << s.hash_bits;
   s.hash_mask = s.hash_size - 1;
   s.hash_shift = ~~((s.hash_bits + MIN_MATCH - 1) / MIN_MATCH);
@@ -7249,7 +7249,7 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   // Don't need mem init magic for JS.
   //s.high_water = 0;  /* nothing written to s->window yet */
 
-  s.lit_bufsize = 1 << (memLevel + 6); /* 16K elements by default */
+  s.lit_bufsize = 1 << (memrole + 6); /* 16K elements by default */
 
   s.pending_buf_size = s.lit_bufsize * 4;
 
@@ -7264,15 +7264,15 @@ function deflateInit2(strm, level, method, windowBits, memLevel, strategy) {
   //s->l_buf = s->pending_buf + (1+sizeof(ush))*s->lit_bufsize;
   s.l_buf = (1 + 2) * s.lit_bufsize;
 
-  s.level = level;
+  s.role = role;
   s.strategy = strategy;
   s.method = method;
 
   return deflateReset(strm);
 }
 
-function deflateInit(strm, level) {
-  return deflateInit2(strm, level, Z_DEFLATED, MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY);
+function deflateInit(strm, role) {
+  return deflateInit2(strm, role, Z_DEFLATED, MAX_WBITS, DEF_MEM_role, Z_DEFAULT_STRATEGY);
 }
 
 
@@ -7311,8 +7311,8 @@ function deflate(strm, flush) {
         put_byte(s, 0);
         put_byte(s, 0);
         put_byte(s, 0);
-        put_byte(s, s.level === 9 ? 2 :
-                    (s.strategy >= Z_HUFFMAN_ONLY || s.level < 2 ?
+        put_byte(s, s.role === 9 ? 2 :
+                    (s.strategy >= Z_HUFFMAN_ONLY || s.role < 2 ?
                      4 : 0));
         put_byte(s, OS_CODE);
         s.status = BUSY_STATE;
@@ -7328,8 +7328,8 @@ function deflate(strm, flush) {
         put_byte(s, (s.gzhead.time >> 8) & 0xff);
         put_byte(s, (s.gzhead.time >> 16) & 0xff);
         put_byte(s, (s.gzhead.time >> 24) & 0xff);
-        put_byte(s, s.level === 9 ? 2 :
-                    (s.strategy >= Z_HUFFMAN_ONLY || s.level < 2 ?
+        put_byte(s, s.role === 9 ? 2 :
+                    (s.strategy >= Z_HUFFMAN_ONLY || s.role < 2 ?
                      4 : 0));
         put_byte(s, s.gzhead.os & 0xff);
         if (s.gzhead.extra && s.gzhead.extra.length) {
@@ -7346,18 +7346,18 @@ function deflate(strm, flush) {
     else // DEFLATE header
     {
       var header = (Z_DEFLATED + ((s.w_bits - 8) << 4)) << 8;
-      var level_flags = -1;
+      var role_flags = -1;
 
-      if (s.strategy >= Z_HUFFMAN_ONLY || s.level < 2) {
-        level_flags = 0;
-      } else if (s.level < 6) {
-        level_flags = 1;
-      } else if (s.level === 6) {
-        level_flags = 2;
+      if (s.strategy >= Z_HUFFMAN_ONLY || s.role < 2) {
+        role_flags = 0;
+      } else if (s.role < 6) {
+        role_flags = 1;
+      } else if (s.role === 6) {
+        role_flags = 2;
       } else {
-        level_flags = 3;
+        role_flags = 3;
       }
-      header |= (level_flags << 6);
+      header |= (role_flags << 6);
       if (s.strstart !== 0) { header |= PRESET_DICT; }
       header += 31 - (header % 31);
 
@@ -7531,7 +7531,7 @@ function deflate(strm, flush) {
     (flush !== Z_NO_FLUSH && s.status !== FINISH_STATE)) {
     var bstate = (s.strategy === Z_HUFFMAN_ONLY) ? deflate_huff(s, flush) :
       (s.strategy === Z_RLE ? deflate_rle(s, flush) :
-        configuration_table[s.level].func(s, flush));
+        configuration_table[s.role].func(s, flush));
 
     if (bstate === BS_FINISH_STARTED || bstate === BS_FINISH_DONE) {
       s.status = FINISH_STATE;
@@ -7882,8 +7882,8 @@ module.exports = function inflate_fast(strm, start) {
   var bits;                   /* local strm.bits */
   var lcode;                  /* local strm.lencode */
   var dcode;                  /* local strm.distcode */
-  var lmask;                  /* mask for first level of length codes */
-  var dmask;                  /* mask for first level of distance codes */
+  var lmask;                  /* mask for first role of length codes */
+  var dmask;                  /* mask for first role of distance codes */
   var here;                   /* retrieved table entry */
   var op;                     /* code bits, operation, extra bits, or */
                               /*  window position, window bytes to copy */
@@ -8101,7 +8101,7 @@ module.exports = function inflate_fast(strm, start) {
               }
             }
           }
-          else if ((op & 64) === 0) {          /* 2nd level distance code */
+          else if ((op & 64) === 0) {          /* 2nd role distance code */
             here = dcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
             continue dodist;
           }
@@ -8114,7 +8114,7 @@ module.exports = function inflate_fast(strm, start) {
           break; // need to emulate goto via "continue"
         }
       }
-      else if ((op & 64) === 0) {              /* 2nd level length code */
+      else if ((op & 64) === 0) {              /* 2nd role length code */
         here = lcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
         continue dolen;
       }
@@ -11167,7 +11167,7 @@ function _tr_flush_block(s, buf, stored_len, last)
   var max_blindex = 0;        /* index of last bit length code of non zero freq */
 
   /* Build the Huffman trees unless a stored block is forced */
-  if (s.level > 0) {
+  if (s.role > 0) {
 
     /* Check if the file is binary or text */
     if (s.strm.data_type === Z_UNKNOWN) {
@@ -11277,7 +11277,7 @@ function _tr_tally(s, dist, lc)
 
 //#ifdef TRUNCATE_BLOCK
 //  /* Try to guess if it is profitable to stop the current block here */
-//  if ((s.last_lit & 0x1fff) === 0 && s.level > 2) {
+//  if ((s.last_lit & 0x1fff) === 0 && s.role > 2) {
 //    /* Compute an upper bound for the compressed length */
 //    out_length = s.last_lit*8;
 //    in_length = s.strstart - s.block_start;

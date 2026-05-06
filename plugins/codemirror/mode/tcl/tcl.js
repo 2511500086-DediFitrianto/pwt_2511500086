@@ -30,7 +30,7 @@ CodeMirror.defineMode("tcl", function() {
         "registry regsub rename resource return scan seek set socket source split " +
         "string subst switch tcl_endOfWord tcl_findLibrary tcl_startOfNextWord " +
         "tcl_wordBreakAfter tcl_startOfPreviousWord tcl_wordBreakBefore tcltest " +
-        "tclvars tell time trace unknown unset update uplevel upvar variable " +
+        "tclvars tell time trace unknown unset update uprole upvar variable " +
     "vwait");
     var functions = parseWords("if elseif else and not or eq ne in ni for foreach while switch");
     var isOperatorChar = /[+\-*&%=<>!?^\/\|]/;

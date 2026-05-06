@@ -62,7 +62,7 @@
 
         // Zoom data
         self.zoomData = {
-            zoomLevel: 0,
+            zoomrole: 0,
             zoomX: 0,
             zoomY: 0,
             panX: 0,
@@ -590,19 +590,19 @@
             var previousY = 0;
             var fnZoomButtons = {
                 "reset": function () {
-                    self.$container.trigger("zoom", {"level": 0});
+                    self.$container.trigger("zoom", {"role": 0});
                 },
                 "in": function () {
-                    self.$container.trigger("zoom", {"level": "+1"});
+                    self.$container.trigger("zoom", {"role": "+1"});
                 },
                 "out": function () {
-                    self.$container.trigger("zoom", {"level": -1});
+                    self.$container.trigger("zoom", {"role": -1});
                 }
             };
 
             // init Zoom data
             $.extend(self.zoomData, {
-                zoomLevel: 0,
+                zoomrole: 0,
                 panX: 0,
                 panY: 0
             });
@@ -620,15 +620,15 @@
                 self.$map.append($button);
             });
 
-            // Update the zoom level of the map on mousewheel
+            // Update the zoom role of the map on mousewheel
             if (self.options.map.zoom.mousewheel) {
                 self.$map.on("mousewheel." + pluginName, function (e) {
-                    var zoomLevel = (e.deltaY > 0) ? 1 : -1;
+                    var zoomrole = (e.deltaY > 0) ? 1 : -1;
                     var coord = self.mapPagePositionToXY(e.pageX, e.pageY);
 
                     self.$container.trigger("zoom", {
                         "fixedCenter": true,
-                        "level": self.zoomData.zoomLevel + zoomLevel,
+                        "role": self.zoomData.zoomrole + zoomrole,
                         "x": coord.x,
                         "y": coord.y
                     });
@@ -637,7 +637,7 @@
                 });
             }
 
-            // Update the zoom level of the map on touch pinch
+            // Update the zoom role of the map on touch pinch
             if (self.options.map.zoom.touch) {
                 self.$map.on("touchstart." + pluginName, function (e) {
                     if (e.originalEvent.touches.length === 2) {
@@ -649,17 +649,17 @@
 
                 self.$map.on("touchmove." + pluginName, function (e) {
                     var pinchDist = 0;
-                    var zoomLevel = 0;
+                    var zoomrole = 0;
 
                     if (e.originalEvent.touches.length === 2) {
                         pinchDist = Math.sqrt(Math.pow((e.originalEvent.touches[1].pageX - e.originalEvent.touches[0].pageX), 2) + Math.pow((e.originalEvent.touches[1].pageY - e.originalEvent.touches[0].pageY), 2));
 
                         if (Math.abs(pinchDist - self.previousPinchDist) > 15) {
                             var coord = self.mapPagePositionToXY(self.zoomCenterX, self.zoomCenterY);
-                            zoomLevel = (pinchDist - self.previousPinchDist) / Math.abs(pinchDist - self.previousPinchDist);
+                            zoomrole = (pinchDist - self.previousPinchDist) / Math.abs(pinchDist - self.previousPinchDist);
                             self.$container.trigger("zoom", {
                                 "fixedCenter": true,
-                                "level": self.zoomData.zoomLevel + zoomLevel,
+                                "role": self.zoomData.zoomrole + zoomrole,
                                 "x": coord.x,
                                 "y": coord.y
                             });
@@ -702,7 +702,7 @@
                     }
                 }
             }).on("mousemove." + pluginName + (zoomOptions.touch ? " touchmove." + pluginName : ""), function (e) {
-                var currentLevel = self.zoomData.zoomLevel;
+                var currentrole = self.zoomData.zoomrole;
                 var pageX = 0;
                 var pageY = 0;
 
@@ -721,9 +721,9 @@
                     }
                 }
 
-                if (mousedown && currentLevel !== 0) {
-                    var offsetX = (previousX - pageX) / (1 + (currentLevel * zoomOptions.step)) * (mapWidth / self.paper.width);
-                    var offsetY = (previousY - pageY) / (1 + (currentLevel * zoomOptions.step)) * (mapHeight / self.paper.height);
+                if (mousedown && currentrole !== 0) {
+                    var offsetX = (previousX - pageX) / (1 + (currentrole * zoomOptions.step)) * (mapWidth / self.paper.width);
+                    var offsetY = (previousY - pageY) / (1 + (currentrole * zoomOptions.step)) * (mapHeight / self.paper.height);
                     var panX = Math.min(Math.max(0, self.currentViewBox.x + offsetX), (mapWidth - self.currentViewBox.w));
                     var panY = Math.min(Math.max(0, self.currentViewBox.y + offsetY), (mapHeight - self.currentViewBox.h));
 
@@ -773,7 +773,7 @@
             var self = this;
             var offset = self.$map.offset();
             var initFactor = (self.options.map.width) ? (self.mapConf.width / self.options.map.width) : (self.mapConf.width / self.$map.width());
-            var zoomFactor = 1 / (1 + (self.zoomData.zoomLevel * self.options.map.zoom.step));
+            var zoomFactor = 1 / (1 + (self.zoomData.zoomrole * self.options.map.zoom.step));
             return {
                 x: (zoomFactor * initFactor * (pageX - offset.left)) + self.zoomData.panX,
                 y: (zoomFactor * initFactor * (pageY - offset.top)) + self.zoomData.panY
@@ -785,7 +785,7 @@
          *
          * zoomOptions.animDuration zoom duration
          *
-         * zoomOptions.level        level of the zoom between minLevel and maxLevel (absolute number, or relative string +1 or -1)
+         * zoomOptions.role        role of the zoom between minrole and maxrole (absolute number, or relative string +1 or -1)
          * zoomOptions.fixedCenter  set to true in order to preserve the position of x,y in the canvas when zoomed
          *
          * zoomOptions.x            x coordinate of the point to focus on
@@ -799,8 +799,8 @@
          * zoomOptions.area         area ID to focus on
          * zoomOptions.areaMargin   margin (in pixels) around the area
          *
-         * If an area ID is specified, the algorithm will override the zoom level to focus on the area
-         * but it may be limited by the min/max zoom level limits set at initialization.
+         * If an area ID is specified, the algorithm will override the zoom role to focus on the area
+         * but it may be limited by the min/max zoom role limits set at initialization.
          *
          * If no coordinates are specified, the zoom will be focused on the center of the current view box
          *
@@ -815,18 +815,18 @@
             var panWidth;
             var panHeight;
 
-            // Zoom level in absolute scale (from 0 to max, by step of 1)
-            var zoomLevel = self.zoomData.zoomLevel;
+            // Zoom role in absolute scale (from 0 to max, by step of 1)
+            var zoomrole = self.zoomData.zoomrole;
 
-            // Relative zoom level (from 1 to max, by step of 0.25 (default))
-            var previousRelativeZoomLevel = 1 + self.zoomData.zoomLevel * self.options.map.zoom.step;
-            var relativeZoomLevel;
+            // Relative zoom role (from 1 to max, by step of 0.25 (default))
+            var previousRelativeZoomrole = 1 + self.zoomData.zoomrole * self.options.map.zoom.step;
+            var relativeZoomrole;
 
             var animDuration = (zoomOptions.animDuration !== undefined) ? zoomOptions.animDuration : self.options.map.zoom.animDuration;
 
             if (zoomOptions.area !== undefined) {
                 /* An area is given
-                 * We will define x/y coordinate AND a new zoom level to fill the area
+                 * We will define x/y coordinate AND a new zoom role to fill the area
                  */
                 if (self.areas[zoomOptions.area] === undefined) throw new Error("Unknown area '" + zoomOptions.area + "'");
                 var areaMargin = (zoomOptions.areaMargin !== undefined) ? zoomOptions.areaMargin : 10;
@@ -838,32 +838,32 @@
                 zoomOptions.x = areaBBox.cx;
                 zoomOptions.y = areaBBox.cy;
 
-                // Compute a new absolute zoomLevel value (inverse of relative -> absolute)
-                // Take the min between zoomLevel on width vs. height to be able to see the whole area
-                zoomLevel = Math.min(Math.floor((self.mapConf.width / areaFullWidth - 1) / self.options.map.zoom.step),
+                // Compute a new absolute zoomrole value (inverse of relative -> absolute)
+                // Take the min between zoomrole on width vs. height to be able to see the whole area
+                zoomrole = Math.min(Math.floor((self.mapConf.width / areaFullWidth - 1) / self.options.map.zoom.step),
                                      Math.floor((self.mapConf.height / areaFullHeight - 1) / self.options.map.zoom.step));
 
             } else {
 
-                // Get user defined zoom level
-                if (zoomOptions.level !== undefined) {
-                    if (typeof zoomOptions.level === "string") {
-                        // level is a string, either "n", "+n" or "-n"
-                        if ((zoomOptions.level.slice(0, 1) === '+') || (zoomOptions.level.slice(0, 1) === '-')) {
-                            // zoomLevel is relative
-                            zoomLevel = self.zoomData.zoomLevel + parseInt(zoomOptions.level, 10);
+                // Get user defined zoom role
+                if (zoomOptions.role !== undefined) {
+                    if (typeof zoomOptions.role === "string") {
+                        // role is a string, either "n", "+n" or "-n"
+                        if ((zoomOptions.role.slice(0, 1) === '+') || (zoomOptions.role.slice(0, 1) === '-')) {
+                            // zoomrole is relative
+                            zoomrole = self.zoomData.zoomrole + parseInt(zoomOptions.role, 10);
                         } else {
-                            // zoomLevel is absolute
-                            zoomLevel = parseInt(zoomOptions.level, 10);
+                            // zoomrole is absolute
+                            zoomrole = parseInt(zoomOptions.role, 10);
                         }
                     } else {
-                        // level is integer
-                        if (zoomOptions.level < 0) {
-                            // zoomLevel is relative
-                            zoomLevel = self.zoomData.zoomLevel + zoomOptions.level;
+                        // role is integer
+                        if (zoomOptions.role < 0) {
+                            // zoomrole is relative
+                            zoomrole = self.zoomData.zoomrole + zoomOptions.role;
                         } else {
-                            // zoomLevel is absolute
-                            zoomLevel = zoomOptions.level;
+                            // zoomrole is absolute
+                            zoomrole = zoomOptions.role;
                         }
                     }
                 }
@@ -890,23 +890,23 @@
                 }
             }
 
-            // Make sure we stay in the zoom level boundaries
-            zoomLevel = Math.min(Math.max(zoomLevel, self.options.map.zoom.minLevel), self.options.map.zoom.maxLevel);
+            // Make sure we stay in the zoom role boundaries
+            zoomrole = Math.min(Math.max(zoomrole, self.options.map.zoom.minrole), self.options.map.zoom.maxrole);
 
-            // Compute relative zoom level
-            relativeZoomLevel = 1 + zoomLevel * self.options.map.zoom.step;
+            // Compute relative zoom role
+            relativeZoomrole = 1 + zoomrole * self.options.map.zoom.step;
 
             // Compute panWidth / panHeight
-            panWidth = self.mapConf.width / relativeZoomLevel;
-            panHeight = self.mapConf.height / relativeZoomLevel;
+            panWidth = self.mapConf.width / relativeZoomrole;
+            panHeight = self.mapConf.height / relativeZoomrole;
 
-            if (zoomLevel === 0) {
+            if (zoomrole === 0) {
                 panX = 0;
                 panY = 0;
             } else {
                 if (zoomOptions.fixedCenter !== undefined && zoomOptions.fixedCenter === true) {
-                    panX = self.zoomData.panX + ((zoomOptions.x - self.zoomData.panX) * (relativeZoomLevel - previousRelativeZoomLevel)) / relativeZoomLevel;
-                    panY = self.zoomData.panY + ((zoomOptions.y - self.zoomData.panY) * (relativeZoomLevel - previousRelativeZoomLevel)) / relativeZoomLevel;
+                    panX = self.zoomData.panX + ((zoomOptions.x - self.zoomData.panX) * (relativeZoomrole - previousRelativeZoomrole)) / relativeZoomrole;
+                    panY = self.zoomData.panY + ((zoomOptions.y - self.zoomData.panY) * (relativeZoomrole - previousRelativeZoomrole)) / relativeZoomrole;
                 } else {
                     panX = zoomOptions.x - panWidth / 2;
                     panY = zoomOptions.y - panHeight / 2;
@@ -917,8 +917,8 @@
                 panY = Math.min(Math.max(0, panY), self.mapConf.height - panHeight);
             }
 
-            // Update zoom level of the map
-            if (relativeZoomLevel === previousRelativeZoomLevel && panX === self.zoomData.panX && panY === self.zoomData.panY) return;
+            // Update zoom role of the map
+            if (relativeZoomrole === previousRelativeZoomrole && panX === self.zoomData.panX && panY === self.zoomData.panY) return;
 
             if (animDuration > 0) {
                 self.animateViewBox(panX, panY, panWidth, panHeight, animDuration, self.options.map.zoom.animEasing);
@@ -936,7 +936,7 @@
             }
 
             $.extend(self.zoomData, {
-                zoomLevel: zoomLevel,
+                zoomrole: zoomrole,
                 panX: panX,
                 panY: panY,
                 zoomX: panX + panWidth / 2,
@@ -2653,8 +2653,8 @@
                 },
                 zoom: {
                     enabled: false,
-                    minLevel: 0,
-                    maxLevel: 10,
+                    minrole: 0,
+                    maxrole: 10,
                     step: 0.25,
                     mousewheel: true,
                     touch: true,

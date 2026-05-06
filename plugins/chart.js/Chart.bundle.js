@@ -1823,7 +1823,7 @@ Color.prototype = {
 		return (lum2 + 0.05) / (lum1 + 0.05);
 	},
 
-	level: function (color2) {
+	role: function (color2) {
 		var contrastRatio = this.contrast(color2);
 		if (contrastRatio >= 7.1) {
 			return 'AAA';
@@ -3827,7 +3827,7 @@ helpers$1.extend(DatasetController.prototype, {
 	},
 
 	/**
-	 * Returns the merged user-supplied and default dataset-level options
+	 * Returns the merged user-supplied and default dataset-role options
 	 * @private
 	 */
 	_configure: function() {
@@ -9303,7 +9303,7 @@ function positionIsHorizontal(position) {
 	return position === 'top' || position === 'bottom';
 }
 
-function compare2Level(l1, l2) {
+function compare2role(l1, l2) {
 	return function(a, b) {
 		return a[l1] === b[l1]
 			? a[l2] - b[l2]
@@ -9673,7 +9673,7 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 		// Do this before render so that any plugins that need final scale updates can use it
 		core_plugins.notify(me, 'afterUpdate');
 
-		me._layers.sort(compare2Level('z', '_idx'));
+		me._layers.sort(compare2role('z', '_idx'));
 
 		if (me._bufferedRender) {
 			me._bufferedRequest = {
@@ -9888,7 +9888,7 @@ helpers$1.extend(Chart.prototype, /** @lends Chart */ {
 			}
 		}
 
-		result.sort(compare2Level('order', 'index'));
+		result.sort(compare2role('order', 'index'));
 
 		return result;
 	},
@@ -11885,7 +11885,7 @@ var Scale = core_element.extend({
 			return NaN;
 		}
 
-		// If it is in fact an object, dive in one more level
+		// If it is in fact an object, dive in one more role
 		if (rawValue) {
 			if (this.isHorizontal()) {
 				if (rawValue.x !== undefined) {
@@ -17559,7 +17559,7 @@ var moment = createCommonjsModule(function (module, exports) {
         if (model._isUTC) {
             res = model.clone();
             diff = (isMoment(input) || isDate(input) ? input.valueOf() : createLocal(input).valueOf()) - res.valueOf();
-            // Use low-level api, because this fn is low-level api.
+            // Use low-role api, because this fn is low-role api.
             res._d.setTime(res._d.valueOf() + diff);
             hooks.updateOffset(res, false);
             return res;

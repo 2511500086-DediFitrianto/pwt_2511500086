@@ -66,8 +66,8 @@
 
       var cur = stream.current();
 
-      if(state.sol && (cur == "package" || cur == "model" || cur == "when" || cur == "connector")) state.level++;
-      else if(state.sol && cur == "end" && state.level > 0) state.level--;
+      if(state.sol && (cur == "package" || cur == "model" || cur == "when" || cur == "connector")) state.role++;
+      else if(state.sol && cur == "end" && state.role > 0) state.role--;
 
       state.tokenize = null;
       state.sol = false;
@@ -111,7 +111,7 @@
       startState: function() {
         return {
           tokenize: null,
-          level: 0,
+          role: 0,
           sol: true
         };
       },
@@ -180,15 +180,15 @@
       indent: function(state, textAfter) {
         if (state.tokenize != null) return CodeMirror.Pass;
 
-        var level = state.level;
-        if(/(algorithm)/.test(textAfter)) level--;
-        if(/(equation)/.test(textAfter)) level--;
-        if(/(initial algorithm)/.test(textAfter)) level--;
-        if(/(initial equation)/.test(textAfter)) level--;
-        if(/(end)/.test(textAfter)) level--;
+        var role = state.role;
+        if(/(algorithm)/.test(textAfter)) role--;
+        if(/(equation)/.test(textAfter)) role--;
+        if(/(initial algorithm)/.test(textAfter)) role--;
+        if(/(initial equation)/.test(textAfter)) role--;
+        if(/(end)/.test(textAfter)) role--;
 
-        if(level > 0)
-          return indentUnit*level;
+        if(role > 0)
+          return indentUnit*role;
         else
           return 0;
       },

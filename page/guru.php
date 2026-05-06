@@ -26,10 +26,9 @@ if (isset($_GET['action']) && $_GET['action'] == "hapus") {
     <div class="container-fluid">
         <div class="card">
             <div class="card-body">
-
-                <a href="starter.php?page=tambah_guru" class="btn btn-primary btn-sm mb-3">
-                    Tambah Guru
-                </a>
+                <?php if($_SESSION['role'] == 'admin'){ ?>
+                    <a href="?page=tambah_guru" class="btn btn-primary">Tambah</a>
+                <?php } ?>
 
                 <table class="table table-striped">
                     <thead>
@@ -63,13 +62,14 @@ if (isset($_GET['action']) && $_GET['action'] == "hapus") {
                             <td><?= $result['Hp']; ?></td>
                             <td><?= $result['Alamat']; ?></td>
                             <td>
-                                <a href="starter.php?page=guru&action=hapus&kd=<?= $result['Kd_guru'] ?>">
-                                    <span class="badge badge-danger">Hapus</span>
-                                </a>
-
-                                <a href="starter.php?page=edit_guru&kd=<?= $result['Kd_guru'] ?>">
-                                    <span class="badge badge-warning">Edit</span>
-                                </a>
+                                <?php if($_SESSION['role'] == 'admin'){ ?>
+                                    <a href="starter.php?page=edit_guru&kd=<?= $result['Kd_guru']; ?>">
+                                        <span class="badge badge-warning">Edit</span>
+                                    </a>
+                                    <a href="starter.php?page=guru&action=hapus&kd=<?= $result['Kd_guru']; ?>">
+                                        <span class="badge badge-danger">Hapus</span>
+                                    </a>
+                                <?php } ?>
                             </td>
                         </tr>
                         <?php } ?>

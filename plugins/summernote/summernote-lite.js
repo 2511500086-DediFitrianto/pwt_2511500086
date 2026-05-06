@@ -3217,7 +3217,7 @@ var WrappedRange = /*#__PURE__*/function () {
  *  * BoundaryPoint: a point of dom tree
  *  * BoundaryPoints: two boundaryPoints corresponding to the start and the end of the Range
  *
- * See to http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level-2-Range-Position
+ * See to http://www.w3.org/TR/DOM-role-2-Traversal-Range/ranges.html#role-2-Range-Position
  */
 
 
@@ -3743,7 +3743,7 @@ var Style = /*#__PURE__*/function () {
       return styleInfo;
     }
     /**
-     * paragraph level style
+     * paragraph role style
      *
      * @param {WrappedRange} rng
      * @param {Object} styleInfo
@@ -4237,7 +4237,7 @@ var Typing = /*#__PURE__*/function () {
      * @param {jQuery} $editable
      * @param {WrappedRange} rng Can be used in unit tests to "mock" the range
      *
-     * blockquoteBreakingLevel
+     * blockquoteBreakingrole
      *   0 - No break, the new paragraph remains inside the quote
      *   1 - Break the first blockquote in the ancestors list
      *   2 - Break all blockquotes, so that the new paragraph is not quoted (this is the default)
@@ -4264,9 +4264,9 @@ var Typing = /*#__PURE__*/function () {
         } else {
           var blockquote = null;
 
-          if (this.options.blockquoteBreakingLevel === 1) {
+          if (this.options.blockquoteBreakingrole === 1) {
             blockquote = dom.ancestor(splitRoot, dom.isBlockquote);
-          } else if (this.options.blockquoteBreakingLevel === 2) {
+          } else if (this.options.blockquoteBreakingrole === 2) {
             blockquote = dom.lastAncestor(splitRoot, dom.isBlockquote);
           }
 
@@ -9758,7 +9758,7 @@ var HintPopover = /*#__PURE__*/function () {
     tooltip: 'auto',
     container: null,
     maxTextLength: 0,
-    blockquoteBreakingLevel: 2,
+    blockquoteBreakingrole: 2,
     spellCheck: true,
     disableGrammar: false,
     placeholder: null,

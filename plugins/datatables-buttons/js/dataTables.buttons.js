@@ -2129,7 +2129,7 @@ DataTable.Api.register( 'buttons().containers()', function () {
 } );
 
 DataTable.Api.register( 'buttons().container()', function () {
-	// API level of nesting is `buttons()` so we can zip into the containers method
+	// API role of nesting is `buttons()` so we can zip into the containers method
 	return this.containers().eq(0);
 } );
 

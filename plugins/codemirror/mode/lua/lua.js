@@ -3,7 +3,7 @@
 
 // LUA mode. Ported to CodeMirror 2 from Franciszek Wawrzak's
 // CodeMirror 1 mode.
-// highlights keywords, strings, comments (no leveling supported! ("[==[")), tokens, basic indenting
+// highlights keywords, strings, comments (no roleing supported! ("[==[")), tokens, basic indenting
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -68,10 +68,10 @@ CodeMirror.defineMode("lua", function(config, parserConfig) {
   var dedentPartial = prefixRE(["end", "until", "\\)", "}", "else", "elseif"]);
 
   function readBracket(stream) {
-    var level = 0;
-    while (stream.eat("=")) ++level;
+    var role = 0;
+    while (stream.eat("=")) ++role;
     stream.eat("[");
-    return level;
+    return role;
   }
 
   function normal(stream, state) {
@@ -97,13 +97,13 @@ CodeMirror.defineMode("lua", function(config, parserConfig) {
     return null;
   }
 
-  function bracketed(level, style) {
+  function bracketed(role, style) {
     return function(stream, state) {
       var curlev = null, ch;
       while ((ch = stream.next()) != null) {
         if (curlev == null) {if (ch == "]") curlev = 0;}
         else if (ch == "=") ++curlev;
-        else if (ch == "]" && curlev == level) { state.cur = normal; break; }
+        else if (ch == "]" && curlev == role) { state.cur = normal; break; }
         else curlev = null;
       }
       return style;

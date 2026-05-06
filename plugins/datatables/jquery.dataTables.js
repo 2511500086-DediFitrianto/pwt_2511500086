@@ -1848,8 +1848,8 @@
 					  source.indexOf('[') !== -1 || source.indexOf('(') !== -1) )
 			{
 				/* If there is a . in the source string then the data source is in a
-				 * nested object so we loop over the data for each level to get the next
-				 * level down. On each loop we test for undefined, and if found immediately
+				 * nested object so we loop over the data for each role to get the next
+				 * role down. On each loop we test for undefined, and if found immediately
 				 * return. This allows entire objects to be missing and sDefaultContent to
 				 * be used if defined, rather than throwing an error
 				 */
@@ -6577,12 +6577,12 @@
 	/**
 	 * Log an error message
 	 *  @param {object} settings dataTables settings object
-	 *  @param {int} level log error messages, or display them to the user
+	 *  @param {int} role log error messages, or display them to the user
 	 *  @param {string} msg error message
 	 *  @param {int} tn Technical note id to get more information about the error.
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnLog( settings, level, msg, tn )
+	function _fnLog( settings, role, msg, tn )
 	{
 		msg = 'DataTables warning: '+
 			(settings ? 'table id='+settings.sTableId+' - ' : '')+msg;
@@ -6592,7 +6592,7 @@
 			'http://datatables.net/tn/'+tn;
 		}
 	
-		if ( ! level  ) {
+		if ( ! role  ) {
 			// Backwards compatibility pre 1.10
 			var ext = DataTable.ext;
 			var type = ext.sErrMode || ext.errMode;
@@ -6978,7 +6978,7 @@
 	 *
 	 * Most methods (those which return an Api instance) are chainable, which means
 	 * the return from a method call also has all of the methods available that the
-	 * top level object had. For example, these two calls are equivalent:
+	 * top role object had. For example, these two calls are equivalent:
 	 *
 	 *     // Not chained
 	 *     api.row.add( {...} );
@@ -10241,7 +10241,7 @@
 		 *   `aaData` for compatibility with DataTables 1.9-) when obtaining data
 		 *   from an Ajax source or for server-side processing - this parameter
 		 *   allows that property to be changed. You can use Javascript dotted
-		 *   object notation to get a data source for multiple levels of nesting, or
+		 *   object notation to get a data source for multiple roles of nesting, or
 		 *   it my be used as a function. As a function it takes a single parameter,
 		 *   the JSON returned from the server, which can be manipulated as
 		 *   required, with the returned value being that used by DataTables as the
@@ -11993,7 +11993,7 @@
 		 * compatibility with DataTables 1.9-) when obtaining data from an Ajax
 		 * source or for server-side processing - this parameter allows that
 		 * property to be changed. You can use Javascript dotted object notation to
-		 * get a data source for multiple levels of nesting.
+		 * get a data source for multiple roles of nesting.
 		 *  @type string
 		 *  @default data
 		 *

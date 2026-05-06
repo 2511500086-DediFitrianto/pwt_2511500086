@@ -9,6 +9,14 @@
 </div>
 <?php
 include "config/koneksi.php";
+include "config/cek_admin.php";
+if($_SESSION['role'] != 'admin'){
+    echo "<script>
+        alert('Akses ditolak!');
+        window.location='starter.php?page=guru';
+    </script>";
+    exit;
+}
 //kode otomatis
 $carikode = mysqli_query($conn,"select max(Kd_guru) from guru") or die (mysqli_error($conn));
 $datakode = mysqli_fetch_array($carikode);
@@ -32,8 +40,9 @@ if(isset($_POST['tambah'])){
     $Alamat = $_POST['Alamat'];
 
     $insert = mysqli_query($conn, "INSERT INTO guru values ('$Kd_guru','$Id_user','$Nm_guru','$Jenkel','$Pend_terakhir','$Hp','$Alamat')");
+    $insertuser = mysqli_query($conn, "INSERT INTO admin (username, password, role) values ('$Kd_guru','12345','guru')");
 
-    if ($insert) {
+    if ($insert && $insertuser) {
         echo '<div class="alert alert-info-dismissible">
         <button type="button" class="close" data-dismiss="alert"
             aria-hidden="true">×</button>

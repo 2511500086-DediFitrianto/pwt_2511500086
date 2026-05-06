@@ -212,7 +212,7 @@ $.extend( RowGroup.prototype, {
 
 	/**
 	 * Get the grouping information from a data set (index) of rows
-	 * @param {number} level Nesting level
+	 * @param {number} role Nesting role
 	 * @param {DataTables.Api} rows API of the rows to consider for this group
 	 * @returns {object[]} Nested grouping information - it is structured like this:
 	 *	{
@@ -229,9 +229,9 @@ $.extend( RowGroup.prototype, {
 	 *	}
 	 * @private
 	 */
-	_group: function ( level, rows ) {
+	_group: function ( role, rows ) {
 		var fns = Array.isArray( this.c.dataSrc ) ? this.c.dataSrc : [ this.c.dataSrc ];
-		var fn = DataTable.ext.oApi._fnGetObjectDataFn( fns[ level ] );
+		var fn = DataTable.ext.oApi._fnGetObjectDataFn( fns[ role ] );
 		var dt = this.s.dt;
 		var group, last;
 		var data = [];
@@ -258,9 +258,9 @@ $.extend( RowGroup.prototype, {
 			data[ data.length-1 ].rows.push( rowIndex );
 		}
 
-		if ( fns[ level+1 ] !== undefined ) {
+		if ( fns[ role+1 ] !== undefined ) {
 			for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-				data[i].children = this._group( level+1, data[i].rows );
+				data[i].children = this._group( role+1, data[i].rows );
 			}
 		}
 
@@ -269,11 +269,11 @@ $.extend( RowGroup.prototype, {
 
 	/**
 	 * Row group display - insert the rows into the document
-	 * @param {number} level Nesting level
+	 * @param {number} role Nesting role
 	 * @param {object[]} groups Takes the nested array from `_group`
 	 * @private
 	 */
-	_groupDisplay: function ( level, groups )
+	_groupDisplay: function ( role, groups )
 	{
 		var dt = this.s.dt;
 		var display;
@@ -285,8 +285,8 @@ $.extend( RowGroup.prototype, {
 			var rows = group.rows;
 
 			if ( this.c.startRender ) {
-				display = this.c.startRender.call( this, dt.rows(rows), groupName, level );
-				row = this._rowWrap( display, this.c.startClassName, level );
+				display = this.c.startRender.call( this, dt.rows(rows), groupName, role );
+				row = this._rowWrap( display, this.c.startClassName, role );
 
 				if ( row ) {
 					row.insertBefore( dt.row( rows[0] ).node() );
@@ -294,8 +294,8 @@ $.extend( RowGroup.prototype, {
 			}
 
 			if ( this.c.endRender ) {
-				display = this.c.endRender.call( this, dt.rows(rows), groupName, level );
-				row = this._rowWrap( display, this.c.endClassName, level );
+				display = this.c.endRender.call( this, dt.rows(rows), groupName, role );
+				row = this._rowWrap( display, this.c.endClassName, role );
 
 				if ( row ) {
 					row.insertAfter( dt.row( rows[ rows.length-1 ] ).node() );
@@ -303,7 +303,7 @@ $.extend( RowGroup.prototype, {
 			}
 
 			if ( group.children ) {
-				this._groupDisplay( level+1, group.children );
+				this._groupDisplay( role+1, group.children );
 			}
 		}
 	},
@@ -314,10 +314,10 @@ $.extend( RowGroup.prototype, {
 	 * @param {node|jQuery|string} display Display value
 	 * @param {string} className Class to add to the row
 	 * @param {array} group
-	 * @param {number} group level
+	 * @param {number} group role
 	 * @private
 	 */
-	_rowWrap: function ( display, className, level )
+	_rowWrap: function ( display, className, role )
 	{
 		var row;
 		
@@ -347,7 +347,7 @@ $.extend( RowGroup.prototype, {
 		return row
 			.addClass( this.c.className )
 			.addClass( className )
-			.addClass( 'dtrg-level-'+level );
+			.addClass( 'dtrg-role-'+role );
 	}
 } );
 

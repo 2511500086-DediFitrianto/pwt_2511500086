@@ -10,6 +10,14 @@
 
 <?php
 include "config/koneksi.php";
+include "config/cek_admin.php";
+if($_SESSION['role'] != 'admin'){
+    echo "<script>
+        alert('Akses ditolak!');
+        window.location='starter.php?page=mapel';
+    </script>";
+    exit;
+}
 $kd = $_GET['kd'];
 $edit = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM mapel WHERE kd_mapel='$kd'"));
 

@@ -544,7 +544,7 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
   var tlvTrackStatements = false;
   var tlvIdentMatch = /^([~!@#\$%\^&\*-\+=\?\/\\\|'"<>]+)([\d\w_]*)/;  // Matches an identifier.
   // Note that ':' is excluded, because of it's use in [:].
-  var tlvFirstLevelIndentMatch = /^[! ]  /;
+  var tlvFirstroleIndentMatch = /^[! ]  /;
   var tlvLineIndentationMatch = /^[! ] */;
   var tlvCommentMatch = /^\/[\/\*]/;
 
@@ -615,9 +615,9 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
               if (tlvScopePrefixChars[ch] && ((match = bodyString.match(tlvIdentMatch)) &&
                   tlvIdentifierStyle[match[1]])) {
                 // This line begins scope.
-                // Next line gets indented one level.
+                // Next line gets indented one role.
                 indented += tlvIndentUnit;
-                // Style the next level of indentation (except non-region keyword identifiers,
+                // Style the next role of indentation (except non-region keyword identifiers,
                 //   which are statements themselves)
                 if (!(ch == "\\" && chPos > 0)) {
                   state.tlvIndentationStyle[depth] = tlvScopePrefixChars[ch];
@@ -626,14 +626,14 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
                 }
               }
             }
-            // Clear out deeper indentation levels unless line is blank.
+            // Clear out deeper indentation roles unless line is blank.
             if (!blankline) {
               while (state.tlvIndentationStyle.length > depth) {
                 state.tlvIndentationStyle.pop();
               }
             }
           }
-          // Set next level of indentation.
+          // Set next role of indentation.
           state.tlvNextIndent = indented;
         }
 
@@ -642,14 +642,14 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
 
           var beginStatement = false;
           if (tlvTrackStatements) {
-            // This starts a statement if the position is at the scope level
+            // This starts a statement if the position is at the scope role
             // and we're not within a statement leading comment.
             beginStatement =
                    (stream.peek() != " ") &&   // not a space
                    (style === undefined) &&    // not a region identifier
                    !state.tlvInBlockComment && // not in block comment
                    //!stream.match(tlvCommentMatch, false) && // not comment start
-                   (stream.column() == state.tlvIndentationStyle.length * tlvIndentUnit);  // at scope level
+                   (stream.column() == state.tlvIndentationStyle.length * tlvIndentUnit);  // at scope role
             if (beginStatement) {
               if (state.statementComment) {
                 // statement already started by comment
@@ -665,7 +665,7 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
             // Region line.
             style += " " + tlvScopeStyle(state, 0, "scope-ident")
           } else if (((stream.pos / tlvIndentUnit) < state.tlvIndentationStyle.length) &&
-                     (match = stream.match(stream.sol() ? tlvFirstLevelIndentMatch : /^   /))) {
+                     (match = stream.match(stream.sol() ? tlvFirstroleIndentMatch : /^   /))) {
             // Indentation
             style = // make this style distinct from the previous one to prevent
                     // codemirror from combining spans
@@ -767,7 +767,7 @@ CodeMirror.defineMode("verilog", function(config, parserConfig) {
       },
 
       startState: function(state) {
-        state.tlvIndentationStyle = [];  // Styles to use for each level of indentation.
+        state.tlvIndentationStyle = [];  // Styles to use for each role of indentation.
         state.tlvCodeActive = true;  // True when we're in a TLV region (and at beginning of file).
         state.tlvNextIndent = -1;    // The number of spaces to autoindent the next line if tlvCodeActive.
         state.tlvInBlockComment = false;  // True inside /**/ comment.

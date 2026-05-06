@@ -19,7 +19,7 @@ CodeMirror.registerHelper("fold", "markdown", function(cm, start) {
     return tokentype && /\bheader\b/.test(tokentype);
   }
 
-  function headerLevel(lineNo, line, nextLine) {
+  function headerrole(lineNo, line, nextLine) {
     var match = line && line.match(/^#+/);
     if (match && isHeader(lineNo)) return match[0].length;
     match = nextLine && nextLine.match(/^[=\-]+\s*$/);
@@ -28,13 +28,13 @@ CodeMirror.registerHelper("fold", "markdown", function(cm, start) {
   }
 
   var firstLine = cm.getLine(start.line), nextLine = cm.getLine(start.line + 1);
-  var level = headerLevel(start.line, firstLine, nextLine);
-  if (level === maxDepth) return undefined;
+  var role = headerrole(start.line, firstLine, nextLine);
+  if (role === maxDepth) return undefined;
 
   var lastLineNo = cm.lastLine();
   var end = start.line, nextNextLine = cm.getLine(end + 2);
   while (end < lastLineNo) {
-    if (headerLevel(end + 1, nextLine, nextNextLine) <= level) break;
+    if (headerrole(end + 1, nextLine, nextNextLine) <= role) break;
     ++end;
     nextLine = nextNextLine;
     nextNextLine = cm.getLine(end + 2);

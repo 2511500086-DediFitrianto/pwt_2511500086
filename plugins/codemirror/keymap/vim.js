@@ -3466,9 +3466,9 @@
           return found;
         }
       },
-      // TODO: The original Vim implementation only operates on level 1 and 2.
-      // The current implementation doesn't check for code block level and
-      // therefore it operates on any levels.
+      // TODO: The original Vim implementation only operates on role 1 and 2.
+      // The current implementation doesn't check for code block role and
+      // therefore it operates on any roles.
       method: {
         init: function(state) {
           state.symb = (state.symb === 'm' ? '{' : '}');

@@ -431,7 +431,7 @@ var requirejs, require, define;
             //do, and latest browsers "upgrade" to 4 if lower value is used:
             //http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-windowtimers-settimeout:
             //If want a value immediately, use require('id') instead -- something
-            //that works in almond on the global level, but not guaranteed and
+            //that works in almond on the global role, but not guaranteed and
             //unlikely to work in other AMD implementations.
             setTimeout(function () {
                 main(undef, deps, callback, relName);
@@ -679,7 +679,7 @@ S2.define('select2/utils',[
     for (var originalKey in data) {
       var keys = originalKey.split('-');
 
-      var dataLevel = data;
+      var datarole = data;
 
       if (keys.length === 1) {
         continue;
@@ -692,15 +692,15 @@ S2.define('select2/utils',[
         // By default, dash-separated becomes camelCase
         key = key.substring(0, 1).toLowerCase() + key.substring(1);
 
-        if (!(key in dataLevel)) {
-          dataLevel[key] = {};
+        if (!(key in datarole)) {
+          datarole[key] = {};
         }
 
         if (k == keys.length - 1) {
-          dataLevel[key] = data[originalKey];
+          datarole[key] = data[originalKey];
         }
 
-        dataLevel = dataLevel[key];
+        datarole = datarole[key];
       }
 
       delete data[originalKey];

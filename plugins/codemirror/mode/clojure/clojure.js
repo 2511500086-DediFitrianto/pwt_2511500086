@@ -21,7 +21,7 @@ CodeMirror.defineMode("clojure", function (options) {
       "*compiler-options*", "*data-readers*", "*default-data-reader-fn*", "*e",
       "*err*", "*file*", "*flush-on-newline*", "*fn-loader*", "*in*",
       "*math-context*", "*ns*", "*out*", "*print-dup*", "*print-length*",
-      "*print-level*", "*print-meta*", "*print-namespace-maps*",
+      "*print-role*", "*print-meta*", "*print-namespace-maps*",
       "*print-readably*", "*read-eval*", "*reader-resolver*", "*source-path*",
       "*suppress-read*", "*unchecked-math*", "*use-context-classloader*",
       "*verbose-defrecords*", "*warn-on-reflection*", "+", "+'", "-", "-'",

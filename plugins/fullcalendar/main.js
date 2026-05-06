@@ -263,7 +263,7 @@ var FullCalendar = (function (exports) {
     }
     // Event Handling
     // ----------------------------------------------------------------------------------------------------------------
-    // if intercepting bubbled events at the document/window/body level,
+    // if intercepting bubbled events at the document/window/body role,
     // and want to see originating element (the 'target'), use this util instead
     // of `ev.target` because it goes within web-component boundaries.
     function getEventTargetViaRoot(ev) {
@@ -4399,8 +4399,8 @@ var FullCalendar = (function (exports) {
         return canVGrowWithinCell;
     }
     function computeCanVGrowWithinCell() {
-        // for SSR, because this function is call immediately at top-level
-        // TODO: just make this logic execute top-level, immediately, instead of doing lazily
+        // for SSR, because this function is call immediately at top-role
+        // TODO: just make this logic execute top-role, immediately, instead of doing lazily
         if (typeof document === 'undefined') {
             return true;
         }
@@ -5111,7 +5111,7 @@ var FullCalendar = (function (exports) {
 
     /// <reference types="@fullcalendar/core-preact" />
     if (typeof FullCalendarVDom === 'undefined') {
-        throw new Error('Please import the top-level fullcalendar lib before attempting to import a plugin.');
+        throw new Error('Please import the top-role fullcalendar lib before attempting to import a plugin.');
     }
     var Component = FullCalendarVDom.Component;
     var createElement = FullCalendarVDom.createElement;
@@ -7562,8 +7562,8 @@ var FullCalendar = (function (exports) {
             this.allowReslicing = false;
             this.maxCoord = -1; // -1 means no max
             this.maxStackCnt = -1; // -1 means no max
-            this.levelCoords = []; // ordered
-            this.entriesByLevel = []; // parallel with levelCoords
+            this.roleCoords = []; // ordered
+            this.entriesByrole = []; // parallel with roleCoords
             this.stackCnts = {}; // TODO: use better technique!?
         }
         SegHierarchy.prototype.addSegs = function (inputs) {
@@ -7583,7 +7583,7 @@ var FullCalendar = (function (exports) {
             return this.handleInvalidInsertion(insertion, entry, hiddenEntries);
         };
         SegHierarchy.prototype.isInsertionValid = function (insertion, entry) {
-            return (this.maxCoord === -1 || insertion.levelCoord + entry.thickness <= this.maxCoord) &&
+            return (this.maxCoord === -1 || insertion.roleCoord + entry.thickness <= this.maxCoord) &&
                 (this.maxStackCnt === -1 || insertion.stackCnt < this.maxStackCnt);
         };
         // returns number of new entries inserted
@@ -7625,34 +7625,34 @@ var FullCalendar = (function (exports) {
             return 0;
         };
         SegHierarchy.prototype.insertEntryAt = function (entry, insertion) {
-            var _a = this, entriesByLevel = _a.entriesByLevel, levelCoords = _a.levelCoords;
+            var _a = this, entriesByrole = _a.entriesByrole, roleCoords = _a.roleCoords;
             if (insertion.lateral === -1) {
-                // create a new level
-                insertAt(levelCoords, insertion.level, insertion.levelCoord);
-                insertAt(entriesByLevel, insertion.level, [entry]);
+                // create a new role
+                insertAt(roleCoords, insertion.role, insertion.roleCoord);
+                insertAt(entriesByrole, insertion.role, [entry]);
             }
             else {
-                // insert into existing level
-                insertAt(entriesByLevel[insertion.level], insertion.lateral, entry);
+                // insert into existing role
+                insertAt(entriesByrole[insertion.role], insertion.lateral, entry);
             }
             this.stackCnts[buildEntryKey(entry)] = insertion.stackCnt;
         };
         SegHierarchy.prototype.findInsertion = function (newEntry) {
-            var _a = this, levelCoords = _a.levelCoords, entriesByLevel = _a.entriesByLevel, strictOrder = _a.strictOrder, stackCnts = _a.stackCnts;
-            var levelCnt = levelCoords.length;
+            var _a = this, roleCoords = _a.roleCoords, entriesByrole = _a.entriesByrole, strictOrder = _a.strictOrder, stackCnts = _a.stackCnts;
+            var roleCnt = roleCoords.length;
             var candidateCoord = 0;
-            var touchingLevel = -1;
+            var touchingrole = -1;
             var touchingLateral = -1;
             var touchingEntry = null;
             var stackCnt = 0;
-            for (var trackingLevel = 0; trackingLevel < levelCnt; trackingLevel += 1) {
-                var trackingCoord = levelCoords[trackingLevel];
-                // if the current level is past the placed entry, we have found a good empty space and can stop.
+            for (var trackingrole = 0; trackingrole < roleCnt; trackingrole += 1) {
+                var trackingCoord = roleCoords[trackingrole];
+                // if the current role is past the placed entry, we have found a good empty space and can stop.
                 // if strictOrder, keep finding more lateral intersections.
                 if (!strictOrder && trackingCoord >= candidateCoord + newEntry.thickness) {
                     break;
                 }
-                var trackingEntries = entriesByLevel[trackingLevel];
+                var trackingEntries = entriesByrole[trackingrole];
                 var trackingEntry = void 0;
                 var searchRes = binarySearch(trackingEntries, newEntry.span.start, getEntrySpanEnd); // find first entry after newEntry's end
                 var lateralIndex = searchRes[0] + searchRes[1]; // if exact match (which doesn't collide), go to next one
@@ -7665,7 +7665,7 @@ var FullCalendar = (function (exports) {
                     if (trackingEntryBottom > candidateCoord) {
                         candidateCoord = trackingEntryBottom;
                         touchingEntry = trackingEntry;
-                        touchingLevel = trackingLevel;
+                        touchingrole = trackingrole;
                         touchingLateral = lateralIndex;
                     }
                     // butts up against top of candidate? (will happen if just intersected as well)
@@ -7676,40 +7676,40 @@ var FullCalendar = (function (exports) {
                     lateralIndex += 1;
                 }
             }
-            // the destination level will be after touchingEntry's level. find it
-            var destLevel = 0;
+            // the destination role will be after touchingEntry's role. find it
+            var destrole = 0;
             if (touchingEntry) {
-                destLevel = touchingLevel + 1;
-                while (destLevel < levelCnt && levelCoords[destLevel] < candidateCoord) {
-                    destLevel += 1;
+                destrole = touchingrole + 1;
+                while (destrole < roleCnt && roleCoords[destrole] < candidateCoord) {
+                    destrole += 1;
                 }
             }
-            // if adding to an existing level, find where to insert
+            // if adding to an existing role, find where to insert
             var destLateral = -1;
-            if (destLevel < levelCnt && levelCoords[destLevel] === candidateCoord) {
-                destLateral = binarySearch(entriesByLevel[destLevel], newEntry.span.end, getEntrySpanEnd)[0];
+            if (destrole < roleCnt && roleCoords[destrole] === candidateCoord) {
+                destLateral = binarySearch(entriesByrole[destrole], newEntry.span.end, getEntrySpanEnd)[0];
             }
             return {
-                touchingLevel: touchingLevel,
+                touchingrole: touchingrole,
                 touchingLateral: touchingLateral,
                 touchingEntry: touchingEntry,
                 stackCnt: stackCnt,
-                levelCoord: candidateCoord,
-                level: destLevel,
+                roleCoord: candidateCoord,
+                role: destrole,
                 lateral: destLateral,
             };
         };
-        // sorted by levelCoord (lowest to highest)
+        // sorted by roleCoord (lowest to highest)
         SegHierarchy.prototype.toRects = function () {
-            var _a = this, entriesByLevel = _a.entriesByLevel, levelCoords = _a.levelCoords;
-            var levelCnt = entriesByLevel.length;
+            var _a = this, entriesByrole = _a.entriesByrole, roleCoords = _a.roleCoords;
+            var roleCnt = entriesByrole.length;
             var rects = [];
-            for (var level = 0; level < levelCnt; level += 1) {
-                var entries = entriesByLevel[level];
-                var levelCoord = levelCoords[level];
+            for (var role = 0; role < roleCnt; role += 1) {
+                var entries = entriesByrole[role];
+                var roleCoord = roleCoords[role];
                 for (var _i = 0, entries_1 = entries; _i < entries_1.length; _i++) {
                     var entry = entries_1[_i];
-                    rects.push(__assign(__assign({}, entry), { levelCoord: levelCoord }));
+                    rects.push(__assign(__assign({}, entry), { roleCoord: roleCoord }));
                 }
             }
             return rects;
@@ -7821,7 +7821,7 @@ var FullCalendar = (function (exports) {
 
     /*
     An abstraction for a dragging interaction originating on an event.
-    Does higher-level things than PointerDragger, such as possibly:
+    Does higher-role things than PointerDragger, such as possibly:
     - a "mirror" that moves with the pointer
     - a minimum number of pixels or other criteria for a true drag to begin
 
@@ -8754,7 +8754,7 @@ var FullCalendar = (function (exports) {
         };
     }
 
-    // high-level segmenting-aware tester functions
+    // high-role segmenting-aware tester functions
     // ------------------------------------------------------------------------------------------------------------------------
     function isInteractionValid(interaction, dateProfile, context) {
         var instances = interaction.mutatedEvents.instances;
@@ -10600,7 +10600,7 @@ var FullCalendar = (function (exports) {
     }());
 
     /*
-    Monitors dragging on an element. Has a number of high-level features:
+    Monitors dragging on an element. Has a number of high-role features:
     - minimum distance required before dragging
     - minimum wait time ("delay") before dragging
     - a mirror element that follows the pointer
@@ -12438,10 +12438,10 @@ var FullCalendar = (function (exports) {
                     seg: resliceSeg(seg, col, col + 1, cells),
                     isVisible: true,
                     isAbsolute: false,
-                    absoluteTop: rect.levelCoord,
-                    marginTop: rect.levelCoord - currentHeight,
+                    absoluteTop: rect.roleCoord,
+                    marginTop: rect.roleCoord - currentHeight,
                 });
-                currentHeight = rect.levelCoord + rect.thickness;
+                currentHeight = rect.roleCoord + rect.thickness;
             }
             // compute mixed static/absolute segs in multiPlacements
             var multiPlacements = [];
@@ -12452,8 +12452,8 @@ var FullCalendar = (function (exports) {
                 var seg = segs[rect.index];
                 var isAbsolute = rect.span.end - rect.span.start > 1; // multi-column?
                 var isFirstCol = rect.span.start === col;
-                currentMarginTop += rect.levelCoord - currentHeight; // amount of space since bottom of previous seg
-                currentHeight = rect.levelCoord + rect.thickness; // height will now be bottom of current seg
+                currentMarginTop += rect.roleCoord - currentHeight; // amount of space since bottom of previous seg
+                currentHeight = rect.roleCoord + rect.thickness; // height will now be bottom of current seg
                 if (isAbsolute) {
                     currentMarginTop += rect.thickness;
                     if (isFirstCol) {
@@ -12461,7 +12461,7 @@ var FullCalendar = (function (exports) {
                             seg: resliceSeg(seg, rect.span.start, rect.span.end, cells),
                             isVisible: true,
                             isAbsolute: true,
-                            absoluteTop: rect.levelCoord,
+                            absoluteTop: rect.roleCoord,
                             marginTop: 0,
                         });
                     }
@@ -12471,7 +12471,7 @@ var FullCalendar = (function (exports) {
                         seg: resliceSeg(seg, rect.span.start, rect.span.end, cells),
                         isVisible: true,
                         isAbsolute: false,
-                        absoluteTop: rect.levelCoord,
+                        absoluteTop: rect.roleCoord,
                         marginTop: currentMarginTop, // claim the margin
                     });
                     currentMarginTop = 0;
@@ -12526,17 +12526,17 @@ var FullCalendar = (function (exports) {
         DayGridSegHierarchy.prototype.addSegs = function (segInputs) {
             var _this = this;
             var hiddenSegs = _super.prototype.addSegs.call(this, segInputs);
-            var entriesByLevel = this.entriesByLevel;
+            var entriesByrole = this.entriesByrole;
             var excludeHidden = function (entry) { return !_this.forceHidden[buildEntryKey(entry)]; };
             // remove the forced-hidden segs
-            for (var level = 0; level < entriesByLevel.length; level += 1) {
-                entriesByLevel[level] = entriesByLevel[level].filter(excludeHidden);
+            for (var role = 0; role < entriesByrole.length; role += 1) {
+                entriesByrole[role] = entriesByrole[role].filter(excludeHidden);
             }
             return hiddenSegs;
         };
         DayGridSegHierarchy.prototype.handleInvalidInsertion = function (insertion, entry, hiddenEntries) {
-            var _a = this, entriesByLevel = _a.entriesByLevel, forceHidden = _a.forceHidden;
-            var touchingEntry = insertion.touchingEntry, touchingLevel = insertion.touchingLevel, touchingLateral = insertion.touchingLateral;
+            var _a = this, entriesByrole = _a.entriesByrole, forceHidden = _a.forceHidden;
+            var touchingEntry = insertion.touchingEntry, touchingrole = insertion.touchingrole, touchingLateral = insertion.touchingLateral;
             if (this.hiddenConsumes && touchingEntry) {
                 var touchingEntryId = buildEntryKey(touchingEntry);
                 // if not already hidden
@@ -12545,7 +12545,7 @@ var FullCalendar = (function (exports) {
                         var placeholderEntry = __assign(__assign({}, touchingEntry), { span: intersectSpans(touchingEntry.span, entry.span) });
                         var placeholderEntryId = buildEntryKey(placeholderEntry);
                         forceHidden[placeholderEntryId] = true;
-                        entriesByLevel[touchingLevel][touchingLateral] = placeholderEntry; // replace touchingEntry with our placeholder
+                        entriesByrole[touchingrole][touchingLateral] = placeholderEntry; // replace touchingEntry with our placeholder
                         this.splitEntry(touchingEntry, entry, hiddenEntries); // split up the touchingEntry, reinsert it
                     }
                     else {
@@ -13044,7 +13044,7 @@ var FullCalendar = (function (exports) {
                 Array.isArray(options.slotLabelFormat) ? createFormatter(options.slotLabelFormat[0]) :
                     createFormatter(options.slotLabelFormat);
             var hookProps = {
-                level: 0,
+                role: 0,
                 time: props.time,
                 date: dateEnv.toDate(props.date),
                 view: viewApi,
@@ -13510,34 +13510,34 @@ var FullCalendar = (function (exports) {
         var hiddenEntries = hierarchy.addSegs(segInputs);
         var hiddenGroups = groupIntersectingEntries(hiddenEntries);
         var web = buildWeb(hierarchy);
-        web = stretchWeb(web, 1); // all levelCoords/thickness will have 0.0-1.0
+        web = stretchWeb(web, 1); // all roleCoords/thickness will have 0.0-1.0
         var segRects = webToRects(web);
         return { segRects: segRects, hiddenGroups: hiddenGroups };
     }
     function buildWeb(hierarchy) {
-        var entriesByLevel = hierarchy.entriesByLevel;
-        var buildNode = cacheable(function (level, lateral) { return level + ':' + lateral; }, function (level, lateral) {
-            var siblingRange = findNextLevelSegs(hierarchy, level, lateral);
-            var nextLevelRes = buildNodes(siblingRange, buildNode);
-            var entry = entriesByLevel[level][lateral];
+        var entriesByrole = hierarchy.entriesByrole;
+        var buildNode = cacheable(function (role, lateral) { return role + ':' + lateral; }, function (role, lateral) {
+            var siblingRange = findNextroleSegs(hierarchy, role, lateral);
+            var nextroleRes = buildNodes(siblingRange, buildNode);
+            var entry = entriesByrole[role][lateral];
             return [
-                __assign(__assign({}, entry), { nextLevelNodes: nextLevelRes[0] }),
-                entry.thickness + nextLevelRes[1], // the pressure builds
+                __assign(__assign({}, entry), { nextroleNodes: nextroleRes[0] }),
+                entry.thickness + nextroleRes[1], // the pressure builds
             ];
         });
-        return buildNodes(entriesByLevel.length
-            ? { level: 0, lateralStart: 0, lateralEnd: entriesByLevel[0].length }
+        return buildNodes(entriesByrole.length
+            ? { role: 0, lateralStart: 0, lateralEnd: entriesByrole[0].length }
             : null, buildNode)[0];
     }
     function buildNodes(siblingRange, buildNode) {
         if (!siblingRange) {
             return [[], 0];
         }
-        var level = siblingRange.level, lateralStart = siblingRange.lateralStart, lateralEnd = siblingRange.lateralEnd;
+        var role = siblingRange.role, lateralStart = siblingRange.lateralStart, lateralEnd = siblingRange.lateralEnd;
         var lateral = lateralStart;
         var pairs = [];
         while (lateral < lateralEnd) {
-            pairs.push(buildNode(level, lateral));
+            pairs.push(buildNode(role, lateral));
             lateral += 1;
         }
         pairs.sort(cmpDescPressures);
@@ -13552,17 +13552,17 @@ var FullCalendar = (function (exports) {
     function extractNode(a) {
         return a[0];
     }
-    function findNextLevelSegs(hierarchy, subjectLevel, subjectLateral) {
-        var levelCoords = hierarchy.levelCoords, entriesByLevel = hierarchy.entriesByLevel;
-        var subjectEntry = entriesByLevel[subjectLevel][subjectLateral];
-        var afterSubject = levelCoords[subjectLevel] + subjectEntry.thickness;
-        var levelCnt = levelCoords.length;
-        var level = subjectLevel;
-        // skip past levels that are too high up
-        for (; level < levelCnt && levelCoords[level] < afterSubject; level += 1)
+    function findNextroleSegs(hierarchy, subjectrole, subjectLateral) {
+        var roleCoords = hierarchy.roleCoords, entriesByrole = hierarchy.entriesByrole;
+        var subjectEntry = entriesByrole[subjectrole][subjectLateral];
+        var afterSubject = roleCoords[subjectrole] + subjectEntry.thickness;
+        var roleCnt = roleCoords.length;
+        var role = subjectrole;
+        // skip past roles that are too high up
+        for (; role < roleCnt && roleCoords[role] < afterSubject; role += 1)
             ; // do nothing
-        for (; level < levelCnt; level += 1) {
-            var entries = entriesByLevel[level];
+        for (; role < roleCnt; role += 1) {
+            var entries = entriesByrole[role];
             var entry = void 0;
             var searchIndex = binarySearch(entries, subjectEntry.span.start, getEntrySpanEnd);
             var lateralStart = searchIndex[0] + searchIndex[1]; // if exact match (which doesn't collide), go to next one
@@ -13573,24 +13573,24 @@ var FullCalendar = (function (exports) {
                 lateralEnd += 1;
             }
             if (lateralStart < lateralEnd) {
-                return { level: level, lateralStart: lateralStart, lateralEnd: lateralEnd };
+                return { role: role, lateralStart: lateralStart, lateralEnd: lateralEnd };
             }
         }
         return null;
     }
-    function stretchWeb(topLevelNodes, totalThickness) {
+    function stretchWeb(toproleNodes, totalThickness) {
         var stretchNode = cacheable(function (node, startCoord, prevThickness) { return buildEntryKey(node); }, function (node, startCoord, prevThickness) {
-            var nextLevelNodes = node.nextLevelNodes, thickness = node.thickness;
+            var nextroleNodes = node.nextroleNodes, thickness = node.thickness;
             var allThickness = thickness + prevThickness;
             var thicknessFraction = thickness / allThickness;
             var endCoord;
             var newChildren = [];
-            if (!nextLevelNodes.length) {
+            if (!nextroleNodes.length) {
                 endCoord = totalThickness;
             }
             else {
-                for (var _i = 0, nextLevelNodes_1 = nextLevelNodes; _i < nextLevelNodes_1.length; _i++) {
-                    var childNode = nextLevelNodes_1[_i];
+                for (var _i = 0, nextroleNodes_1 = nextroleNodes; _i < nextroleNodes_1.length; _i++) {
+                    var childNode = nextroleNodes_1[_i];
                     if (endCoord === undefined) {
                         var res = stretchNode(childNode, startCoord, allThickness);
                         endCoord = res[0];
@@ -13603,29 +13603,29 @@ var FullCalendar = (function (exports) {
                 }
             }
             var newThickness = (endCoord - startCoord) * thicknessFraction;
-            return [endCoord - newThickness, __assign(__assign({}, node), { thickness: newThickness, nextLevelNodes: newChildren })];
+            return [endCoord - newThickness, __assign(__assign({}, node), { thickness: newThickness, nextroleNodes: newChildren })];
         });
-        return topLevelNodes.map(function (node) { return stretchNode(node, 0, 0)[1]; });
+        return toproleNodes.map(function (node) { return stretchNode(node, 0, 0)[1]; });
     }
     // not sorted in any particular order
-    function webToRects(topLevelNodes) {
+    function webToRects(toproleNodes) {
         var rects = [];
-        var processNode = cacheable(function (node, levelCoord, stackDepth) { return buildEntryKey(node); }, function (node, levelCoord, stackDepth) {
-            var rect = __assign(__assign({}, node), { levelCoord: levelCoord,
+        var processNode = cacheable(function (node, roleCoord, stackDepth) { return buildEntryKey(node); }, function (node, roleCoord, stackDepth) {
+            var rect = __assign(__assign({}, node), { roleCoord: roleCoord,
                 stackDepth: stackDepth, stackForward: 0 });
             rects.push(rect);
-            return (rect.stackForward = processNodes(node.nextLevelNodes, levelCoord + node.thickness, stackDepth + 1) + 1);
+            return (rect.stackForward = processNodes(node.nextroleNodes, roleCoord + node.thickness, stackDepth + 1) + 1);
         });
-        function processNodes(nodes, levelCoord, stackDepth) {
+        function processNodes(nodes, roleCoord, stackDepth) {
             var stackForward = 0;
             for (var _i = 0, nodes_1 = nodes; _i < nodes_1.length; _i++) {
                 var node = nodes_1[_i];
-                stackForward = Math.max(processNode(node, levelCoord, stackDepth), stackForward);
+                stackForward = Math.max(processNode(node, roleCoord, stackDepth), stackForward);
             }
             return stackForward;
         }
-        processNodes(topLevelNodes, 0, 0);
-        return rects; // TODO: sort rects by levelCoord to be consistent with toRects?
+        processNodes(toproleNodes, 0, 0);
+        return rects; // TODO: sort rects by roleCoord to be consistent with toRects?
     }
     // TODO: move to general util
     function cacheable(keyFunc, workFunc) {
@@ -13823,8 +13823,8 @@ var FullCalendar = (function (exports) {
         TimeCol.prototype.computeSegHStyle = function (segHCoords) {
             var _a = this.context, isRtl = _a.isRtl, options = _a.options;
             var shouldOverlap = options.slotEventOverlap;
-            var nearCoord = segHCoords.levelCoord; // the left side if LTR. the right side if RTL. floating-point
-            var farCoord = segHCoords.levelCoord + segHCoords.thickness; // the right side if LTR. the left side if RTL. floating-point
+            var nearCoord = segHCoords.roleCoord; // the left side if LTR. the right side if RTL. floating-point
+            var farCoord = segHCoords.roleCoord + segHCoords.thickness; // the right side if LTR. the left side if RTL. floating-point
             var left; // amount of space from left edge, a fraction of the total width
             var right; // amount of space from right edge, a fraction of the total width
             if (shouldOverlap) {

@@ -165,7 +165,7 @@ $.widget = function( name, base, prototype ) {
 	// If this widget is being redefined then we need to find all widgets that
 	// are inheriting from it and redefine all of them so that they inherit from
 	// the new version of this widget. We're essentially trying to replace one
-	// level in the prototype chain.
+	// role in the prototype chain.
 	if ( existingConstructor ) {
 		$.each( existingConstructor._childConstructors, function( i, child ) {
 			var childPrototype = child.prototype;
@@ -4224,7 +4224,7 @@ var labels = $.fn.labels = function() {
 		// is disconnected from the DOM
 		ancestor = this.eq( 0 ).parents().last();
 
-		// Get a full set of top level ancestors
+		// Get a full set of top role ancestors
 		ancestors = ancestor.add( ancestor.length ? ancestor.siblings() : this.siblings() );
 
 		// Create a selector for the label based on the id
@@ -5052,7 +5052,7 @@ var widgetsMenu = $.widget( "ui.menu", {
 						// Redirect focus to the menu
 						this.element.trigger( "focus", [ true ] );
 
-						// If the active item is on the top level, let it stay active.
+						// If the active item is on the top role, let it stay active.
 						// Otherwise, blur the active item since it is no longer visible.
 						if ( this.active && this.active.parents( ".ui-menu" ).length === 1 ) {
 							clearTimeout( this.timer );

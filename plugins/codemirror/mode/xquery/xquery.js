@@ -40,7 +40,7 @@ CodeMirror.defineMode("xquery", function() {
     'entire', 'every', 'exactly', 'except', 'external', 'first', 'following', 'following-sibling',
     'for', 'from', 'ftand', 'ftnot', 'ft-option', 'ftor', 'function', 'fuzzy', 'greatest', 'group',
     'if', 'import', 'in', 'inherit', 'insensitive', 'insert', 'instance', 'intersect', 'into',
-    'invoke', 'is', 'item', 'language', 'last', 'lax', 'least', 'let', 'levels', 'lowercase', 'map',
+    'invoke', 'is', 'item', 'language', 'last', 'lax', 'least', 'let', 'roles', 'lowercase', 'map',
     'modify', 'module', 'most', 'namespace', 'next', 'no', 'node', 'nodes', 'no-inherit',
     'no-preserve', 'not', 'occurs', 'of', 'only', 'option', 'order', 'ordered', 'ordering',
     'paragraph', 'paragraphs', 'parent', 'phrase', 'preceding', 'preceding-sibling', 'preserve',

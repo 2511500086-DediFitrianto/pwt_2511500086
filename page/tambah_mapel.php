@@ -9,6 +9,14 @@
 </div>
 <?php
 include "config/koneksi.php";
+include "config/cek_admin.php";
+if($_SESSION['role'] != 'admin'){
+    echo "<script>
+        alert('Akses ditolak!');
+        window.location='starter.php?page=mapel';
+    </script>";
+    exit;
+}
 //kode otomatis
 $carikode = mysqli_query($conn,"select max(kd_mapel) from mapel") or die (mysqli_error($conn));
 $datakode = mysqli_fetch_array($carikode);

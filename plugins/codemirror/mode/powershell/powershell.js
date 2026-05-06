@@ -137,7 +137,7 @@ CodeMirror.defineMode('powershell', function() {
   var variableBuiltins = buildRegexp([
     /[$?^_]|Args|ConfirmPreference|ConsoleFileName|DebugPreference|Error|ErrorActionPreference|ErrorView|ExecutionContext/,
     /FormatEnumerationLimit|Home|Host|Input|MaximumAliasCount|MaximumDriveCount|MaximumErrorCount|MaximumFunctionCount/,
-    /MaximumHistoryCount|MaximumVariableCount|MyInvocation|NestedPromptLevel|OutputEncoding|Pid|Profile|ProgressPreference/,
+    /MaximumHistoryCount|MaximumVariableCount|MyInvocation|NestedPromptrole|OutputEncoding|Pid|Profile|ProgressPreference/,
     /PSBoundParameters|PSCommandPath|PSCulture|PSDefaultParameterValues|PSEmailServer|PSHome|PSScriptRoot|PSSessionApplicationName/,
     /PSSessionConfigurationName|PSSessionOption|PSUICulture|PSVersionTable|Pwd|ShellId|StackTrace|VerbosePreference/,
     /WarningPreference|WhatIfPreference/,

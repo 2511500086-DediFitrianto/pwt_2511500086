@@ -3,16 +3,21 @@ session_start();
 include "config/koneksi.php";
 
 if(isset($_POST['login'])){
-
     $username = $_POST['username'];
     $password = $_POST['password'];
 
     $query = mysqli_query($conn,"SELECT * FROM admin WHERE username='$username' AND password='$password'");
-    $cek = mysqli_num_rows($query);
+    
+    if(mysqli_num_rows($query) > 0){
 
-    if($cek > 0){
-        $_SESSION['username']=$username;
-        header("location:starter.php");
+        $data = mysqli_fetch_array($query); 
+
+        $_SESSION['username'] = $data['username'];
+        $_SESSION['role'] = $data['role']; 
+
+        header("location:starter.php?page=dashboard");
+        exit;
+
     }else{
         echo "<script>alert('Username atau Password salah');</script>";
     }

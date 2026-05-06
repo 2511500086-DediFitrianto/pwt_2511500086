@@ -25,11 +25,11 @@ CodeMirror.defineMode("mirc", function() {
                             "$alias $and $anick $ansi2mirc $aop $appactive $appstate $asc $asctime " +
                             "$asin $atan $avoice $away $awaymsg $awaytime $banmask $base $bfind " +
                             "$binoff $biton $bnick $bvar $bytes $calc $cb $cd $ceil $chan $chanmodes " +
-                            "$chantypes $chat $chr $cid $clevel $click $cmdbox $cmdline $cnick $color " +
+                            "$chantypes $chat $chr $cid $crole $click $cmdbox $cmdline $cnick $color " +
                             "$com $comcall $comchan $comerr $compact $compress $comval $cos $count " +
                             "$cr $crc $creq $crlf $ctime $ctimer $ctrlenter $date $day $daylight " +
                             "$dbuh $dbuw $dccignore $dccport $dde $ddename $debug $decode $decompress " +
-                            "$deltok $devent $dialog $did $didreg $didtok $didwm $disk $dlevel $dll " +
+                            "$deltok $devent $dialog $did $didreg $didtok $didwm $disk $drole $dll " +
                             "$dllcall $dname $dns $duration $ebeeps $editbox $emailaddr $encode $error " +
                             "$eval $event $exist $feof $ferr $fgetc $file $filename $filtered $finddir " +
                             "$finddirn $findfile $findfilen $findtok $fline $floor $fopen $fread $fserve " +
@@ -39,7 +39,7 @@ CodeMirror.defineMode("mirc", function() {
                             "$inelipse $ini $inmidi $inpaste $inpoly $input $inrect $inroundrect " +
                             "$insong $instok $int $inwave $ip $isalias $isbit $isdde $isdir $isfile " +
                             "$isid $islower $istok $isupper $keychar $keyrpt $keyval $knick $lactive " +
-                            "$lactivecid $lactivewid $left $len $level $lf $line $lines $link $lock " +
+                            "$lactivecid $lactivewid $left $len $role $lf $line $lines $link $lock " +
                             "$lock $locked $log $logstamp $logstampfmt $longfn $longip $lower $ltimer " +
                             "$maddress $mask $matchkey $matchtok $md5 $me $menu $menubar $menucontext " +
                             "$menutype $mid $middir $mircdir $mircexe $mircini $mklogfn $mnick $mode " +
@@ -53,14 +53,14 @@ CodeMirror.defineMode("mirc", function() {
                             "$site $sline $snick $snicks $snotify $sock $sockbr $sockerr $sockname " +
                             "$sorttok $sound $sqrt $ssl $sreq $sslready $status $strip $str $stripped " +
                             "$syle $submenu $switchbar $tan $target $ticks $time $timer $timestamp " +
-                            "$timestampfmt $timezone $tip $titlebar $toolbar $treebar $trust $ulevel " +
+                            "$timestampfmt $timezone $tip $titlebar $toolbar $treebar $trust $urole " +
                             "$ulist $upper $uptime $url $usermode $v1 $v2 $var $vcmd $vcmdstat $vcmdver " +
                             "$version $vnick $vol $wid $width $wildsite $wildtok $window $wrap $xor");
   var keywords = parseWords("abook ajinvite alias aline ame amsg anick aop auser autojoin avoice " +
                             "away background ban bcopy beep bread break breplace bset btrunc bunset bwrite " +
                             "channel clear clearall cline clipboard close cnick color comclose comopen " +
                             "comreg continue copy creq ctcpreply ctcps dcc dccserver dde ddeserver " +
-                            "debug dec describe dialog did didtok disable disconnect dlevel dline dll " +
+                            "debug dec describe dialog did didtok disable disconnect drole dline dll " +
                             "dns dqwindow drawcopy drawdot drawfill drawline drawpic drawrect drawreplace " +
                             "drawrot drawsave drawscroll drawtext ebeeps echo editbox emailaddr enable " +
                             "events exit fclose filter findtext finger firewall flash flist flood flush " +
@@ -71,7 +71,7 @@ CodeMirror.defineMode("mirc", function() {
                             "load loadbuf localinfo log mdi me menubar mkdir mnick mode msg nick noop notice " +
                             "notify omsg onotice part partall pdcc perform play playctrl pop protect pvoice " +
                             "qme qmsg query queryn quit raw reload remini remote remove rename renwin " +
-                            "reseterror resetidle return rlevel rline rmdir run ruser save savebuf saveini " +
+                            "reseterror resetidle return rrole rline rmdir run ruser save savebuf saveini " +
                             "say scid scon server set showmirc signam sline sockaccept sockclose socklist " +
                             "socklisten sockmark sockopen sockpause sockread sockrename sockudp sockwrite " +
                             "sound speak splay sreq strip switchbar timer timestamp titlebar tnick tokenize " +

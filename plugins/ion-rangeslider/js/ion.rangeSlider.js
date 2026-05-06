@@ -594,7 +594,7 @@
          *
          * @param target {String}
          */
-        changeLevel: function (target) {
+        changerole: function (target) {
             switch (target) {
                 case "single":
                     this.coords.p_gap = this.toFixed(this.coords.p_pointer - this.coords.p_single_fake);
@@ -842,7 +842,7 @@
             this.coords.x_pointer = x - this.coords.x_gap;
 
             this.calcPointerPercent();
-            this.changeLevel(target);
+            this.changerole(target);
 
             if (is_old_ie) {
                 $("*").prop("unselectable", true);

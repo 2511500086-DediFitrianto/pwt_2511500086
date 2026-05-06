@@ -1272,11 +1272,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
         if (!elem) return elem;
         var newData = [];
         for (var i = 0; i < elem.length; i++) {
-            var newLevel = [];
+            var newrole = [];
             for (var j = 0; j < elem[i].length; j++) {
-                newLevel.push(elem[i][j]);
+                newrole.push(elem[i][j]);
             }
-            newData.push(newLevel);
+            newData.push(newrole);
         }
       return newData; } );
     // PATHS

@@ -59,9 +59,9 @@
         if (xmlContext && stream.match(/^[^>]*>\s*$/, false)) {
           while (xmlContext.prev && !xmlContext.startOfLine)
             xmlContext = xmlContext.prev
-          // If tag starts the line, use XML indentation level
+          // If tag starts the line, use XML indentation role
           if (xmlContext.startOfLine) indent -= config.indentUnit
-          // Else use JS indentation level
+          // Else use JS indentation role
           else if (cx.prev.state.lexical) indent = cx.prev.state.lexical.indented
         // Else if inside of tag
         } else if (cx.depth == 1) {

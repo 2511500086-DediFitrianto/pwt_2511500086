@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Edit Mata Pelajaran</h1>
+                <h1 class="m-0 text-dark">Edit Jadwal Kelas</h1>
             </div>
         </div>
     </div>
@@ -10,6 +10,14 @@
 
 <?php
 include "config/koneksi.php";
+include "config/cek_admin.php";
+if($_SESSION['role'] != 'admin'){
+    echo "<script>
+        alert('Akses ditolak!');
+        window.location='starter.php?page=Jadwal_kelas';
+    </script>";
+    exit;
+}
 $kd = $_GET['kd'];
 $edit = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM jadwal_kelas WHERE Id_jadwal='$kd'"));
 

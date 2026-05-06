@@ -61,7 +61,7 @@ CodeMirror.defineMode('mllike', function(_config, parserConfig) {
     }
     if (ch === '(') {
       if (stream.match(/^\*(?!\))/)) {
-        state.commentLevel++;
+        state.commentrole++;
         state.tokenize = tokenComment;
         return state.tokenize(stream, state);
       }
@@ -124,12 +124,12 @@ CodeMirror.defineMode('mllike', function(_config, parserConfig) {
 
   function tokenComment(stream, state) {
     var prev, next;
-    while(state.commentLevel > 0 && (next = stream.next()) != null) {
-      if (prev === '(' && next === '*') state.commentLevel++;
-      if (prev === '*' && next === ')') state.commentLevel--;
+    while(state.commentrole > 0 && (next = stream.next()) != null) {
+      if (prev === '(' && next === '*') state.commentrole++;
+      if (prev === '*' && next === ')') state.commentrole--;
       prev = next;
     }
-    if (state.commentLevel <= 0) {
+    if (state.commentrole <= 0) {
       state.tokenize = tokenBase;
     }
     return 'comment';
@@ -148,7 +148,7 @@ CodeMirror.defineMode('mllike', function(_config, parserConfig) {
   }
 
   return {
-    startState: function() {return {tokenize: tokenBase, commentLevel: 0, longString: false};},
+    startState: function() {return {tokenize: tokenBase, commentrole: 0, longString: false};},
     token: function(stream, state) {
       if (stream.eatSpace()) return null;
       return state.tokenize(stream, state);

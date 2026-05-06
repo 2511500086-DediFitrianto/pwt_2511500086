@@ -11,6 +11,8 @@
 <?php
 include "config/koneksi.php";
 
+echo "Role: " . $_SESSION['role'];
+
 if (isset($_GET['action']) && $_GET['action'] == "hapus") {
     $kd = $_GET['kd'];
     $query = mysqli_query($conn, "DELETE FROM mapel WHERE kd_mapel='$kd'");
@@ -26,10 +28,9 @@ if (isset($_GET['action']) && $_GET['action'] == "hapus") {
     <div class="container-fluid">
         <div class="card">
             <div class="card-body">
-
-                <a href="starter.php?page=tambah_mapel" class="btn btn-primary btn-sm mb-3">
-                    Tambah Mapel
-                </a>
+                <?php if($_SESSION['role'] == 'admin'){ ?>
+                    <a href="?page=tambah_mapel" class="btn btn-primary">Tambah</a>
+                <?php } ?>
 
                 <table class="table table-striped">
                     <thead>
@@ -55,13 +56,14 @@ if (isset($_GET['action']) && $_GET['action'] == "hapus") {
                             <td><?= $result['nm_mapel']; ?></td>
                             <td><?= $result['kkm']; ?></td>
                             <td>
-                                <a href="starter.php?page=mapel&action=hapus&kd=<?= $result['kd_mapel'] ?>">
-                                    <span class="badge badge-danger">Hapus</span>
-                                </a>
-
-                                <a href="starter.php?page=edit_mapel&kd=<?= $result['kd_mapel'] ?>">
-                                    <span class="badge badge-warning">Edit</span>
-                                </a>
+                                <?php if($_SESSION['role'] == 'admin'){ ?>
+                                    <a href="starter.php?page=edit_mapel&kd=<?= $result['kd_mapel']; ?>">
+                                        <span class="badge badge-warning">Edit</span>
+                                    </a>
+                                    <a href="starter.php?page=mapel&action=hapus&kd=<?= $result['kd_mapel']; ?>">
+                                        <span class="badge badge-danger">Hapus</span>
+                                    </a>
+                                <?php } ?>
                             </td>
                         </tr>
                         <?php } ?>
