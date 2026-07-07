@@ -180,6 +180,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Skripsi</p>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a href="starter.php?page=detail.jadwal" 
+                   class="nav-link <?= ($_GET['page'] == 'detail.jadwal') ? 'active' : ''; ?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Jadwal</p>
+                </a>
+              </li>
             
               <li class="nav-item">
                 <a href="starter.php?page=ganti_password" 
