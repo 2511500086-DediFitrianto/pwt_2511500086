@@ -51,7 +51,7 @@ if (isset($_POST['update'])) {
 
     if ($update) {
 
-        //hapus detail lama
+
         mysqli_query($conn, "
             DELETE FROM detailjadwal
             WHERE Id_jadwal='$kd'
